@@ -107,7 +107,7 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 		lblLogo.setHorizontalAlignment(SwingConstants.CENTER);
 		Image img = new ImageIcon(this.getClass().getResource("/logo.png")).getImage();
 		lblLogo.setIcon(new ImageIcon(img));
-		lblLogo.setBounds(25, 5, 284, 177);
+		lblLogo.setBounds(25, 10, 284, 177);
 		contentPane.add(lblLogo);
 		
 		int informacioX = altoventana/2 - altoboton;
@@ -131,8 +131,8 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 		btnCerrar.setBounds(964, 11, 55, 23);
 		panelTitulo.add(btnCerrar);
 		
-		this.lblTitulo = new JLabel("<html><center>GERENCIA REGIONAL DE TRANPORTES <br>Y COMUNICACIONES - AREQUIPA</center></html>");
-		lblTitulo.setBounds(369, 59, 592, 74);
+		this.lblTitulo = new JLabel("<html><center>GERENCIA REGIONAL DE TRANSPORTES <br>Y COMUNICACIONES - AREQUIPA</center></html>");
+		lblTitulo.setBounds(336, 59, 672, 74);
 		panelTitulo.add(lblTitulo);
 		this.lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
 		this.lblTitulo.setForeground(Color.WHITE);
