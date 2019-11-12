@@ -362,10 +362,23 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 			actionPerformedBtnCerrar(arg0);
 		}
 	}
+	
+	public int nro = -1;
+	
 	protected void actionPerformedBtnCerrar(ActionEvent arg0) {
+		nro = -1;
+		numeros n = new numeros(this);
+		n.setVisible(true);
+		n.setAlwaysOnTop(true);	
+		n.setLocationRelativeTo(null);
+		/*
 		String pass = JOptionPane.showInputDialog(null, "Ingrese contraseña", null, JOptionPane.INFORMATION_MESSAGE);
 		if(pass.equals("grtc"))
+			System.exit(0);*/
+	}
+	
+	public void verificarPass(){
+		if(nro == 2244)
 			System.exit(0);
-		
 	}
 }

@@ -92,15 +92,15 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 		this.btnLlamarSiguiente.setBounds(10, 68, 210, 60);
 		this.contentPane.add(this.btnLlamarSiguiente);
 		
-		this.btnRellamar = new JButton("<html><center>Rellamar siguiente<br>ticket</center></html>");
-		this.btnRellamar.setEnabled(false);
+		this.btnRellamar = new JButton("<html><center>Rellamar<br>ticket</center></html>");
+		btnRellamar.setEnabled(false);
 		this.btnRellamar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				actionPerformedBtnRellamar(e);
 			}
 		});
-		this.btnRellamar.setForeground(Color.WHITE);
-		this.btnRellamar.setBackground(new Color(70, 130, 180));
+		this.btnRellamar.setForeground(Color.DARK_GRAY);
+		this.btnRellamar.setBackground(new Color(240, 230, 140));
 		this.btnRellamar.setFont(new Font("Tahoma", Font.BOLD, 15));
 		this.btnRellamar.setBounds(233, 68, 210, 60);
 		this.contentPane.add(this.btnRellamar);
@@ -141,7 +141,7 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 		this.contentPane.add(this.txtNroAtencion);
 		this.txtNroAtencion.setColumns(10);
 		
-		this.lblA = new JLabel("NRO EN ATENCI\u00D3N:");
+		this.lblA = new JLabel("TICKET EN ATENCI\u00D3N:");
 		this.lblA.setHorizontalAlignment(SwingConstants.CENTER);
 		this.lblA.setFont(new Font("Tahoma", Font.BOLD, 15));
 		this.lblA.setBounds(99, 225, 247, 33);
@@ -154,8 +154,8 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 		this.panel.setLayout(null);
 		
 		this.cbTipo = new JComboBox();
-		cbTipo.setEnabled(false);
-		this.cbTipo.setModel(new DefaultComboBoxModel(new String[] {"Seleccione una opci\u00F3n", "VENTANILLA", "CAJA", "TURNO"}));
+		cbTipo.setForeground(new Color(220, 20, 60));
+		this.cbTipo.setModel(new DefaultComboBoxModel(new String[] {"Seleccione un tipo", "VENTANILLA", "CAJA", "TURNO"}));
 		this.cbTipo.setFont(new Font("Tahoma", Font.BOLD, 15));
 		this.cbTipo.setBackground(SystemColor.control);
 		this.cbTipo.setBounds(233, 11, 210, 36);
@@ -174,7 +174,7 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 		});
 		this.txtNroVentanilla.setFont(new Font("Tahoma", Font.BOLD, 15));
 		this.txtNroVentanilla.setBackground(SystemColor.control);
-		this.txtNroVentanilla.setForeground(Color.DARK_GRAY);
+		this.txtNroVentanilla.setForeground(new Color(220, 20, 60));
 		this.txtNroVentanilla.setColumns(10);
 		
 		this.txtTipoAtencion = new JTextField();
@@ -225,7 +225,7 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 		
 		Thread mihilo = new Thread(this);
 		mihilo.start();
-		cbTipo.setSelectedIndex(3);
+		cbTipo.setSelectedIndex(0);
 	}
 	
 	protected void keyTypedTxtNroVentanilla(KeyEvent e) {
@@ -251,9 +251,10 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 	}
 	
 	protected void actionPerformedBtnLlamarSiguiente(ActionEvent ex) {
-		
-		if(cbTipo.getSelectedIndex() == 0 || txtNroVentanilla.getText().equals("Ingrese nro"))
-			JOptionPane.showMessageDialog(null, "Seleccione los datos correctamente", "Alerta", JOptionPane.ERROR_MESSAGE);
+		if(txtNroVentanilla.getText().equals("Ingrese nro"))
+			JOptionPane.showMessageDialog(null, "Por favor, ingrese su número de ventanilla.", "Alerta", JOptionPane.ERROR_MESSAGE);
+		if(cbTipo.getSelectedIndex() == 0)
+			JOptionPane.showMessageDialog(null, "Por favor, indique el tipo de ventanilla", "Alerta", JOptionPane.ERROR_MESSAGE);
 		else{
 			if(nroVentanilla >= 30)
 				JOptionPane.showMessageDialog(null, "No tiene permiso para crear mas de 30 módulos", "Alerta", JOptionPane.ERROR_MESSAGE);
@@ -338,6 +339,8 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 				oos_indicar_ausente.writeObject(pd);		 
 				oos_indicar_ausente.close();
 				ActivarLlamar();
+				txtTipoAtencion.setText("");
+				txtNroAtencion.setText("");
 				
 			} catch (UnknownHostException e) {
 				//JOptionPane.showMessageDialog(null, "Error al Marcar como ausente " + e.getMessage());
@@ -370,6 +373,8 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 				oos_indicar_atendido.writeObject(pd);		 
 				oos_indicar_atendido.close();
 				ActivarLlamar();
+				txtTipoAtencion.setText("");
+				txtNroAtencion.setText("");
 				
 			} catch (UnknownHostException e) {
 			//	JOptionPane.showMessageDialog(null, "Error al Marcar como atendido" + e.getMessage());

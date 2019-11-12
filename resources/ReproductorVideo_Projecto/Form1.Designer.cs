@@ -53,7 +53,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(554, 48);
             this.label1.TabIndex = 1;
-            this.label1.Text = "GERENCIA REGIONAL DE TRANPORTES Y COMUNICACIONES LES DA LA BIENVENIDA";
+            this.label1.Text = "GERENCIA REGIONAL DE TRANSPORTES Y COMUNICACIONES LES DA LA BIENVENIDA";
             this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
