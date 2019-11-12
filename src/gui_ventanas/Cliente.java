@@ -221,7 +221,7 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 			ipCliente = address.getHostAddress();
 			//System.out.println("IP Local :"+address.getHostAddress());
 		} catch (UnknownHostException e) {
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Error al cargar " + e.getMessage());
 		}
 		
 		
@@ -242,9 +242,9 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 			oos_llamar_nticket.close();
 			
 		} catch (UnknownHostException e) {
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Error al solicitar Ticket " + e.getMessage());
 		} catch (IOException e) {
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Error al solicitar ticket " + e.getMessage());
 		}
 	}
 
@@ -261,29 +261,29 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 			oos_llamar_nticket.close();
 			
 		} catch (UnknownHostException e) {
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Error al solicitar Ticket Caja " + e.getMessage());
 		} catch (IOException e) {
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Error al solicitar Ticket caja" + e.getMessage());
 		}	
 	}
 	
-protected void actionPerformedBtnTurno(ActionEvent arg0) {
-	try {
-		Socket socketSolicitarTicket = new Socket(ipPantalla, puertoPantalla);
+	protected void actionPerformedBtnTurno(ActionEvent arg0) {
+		try {
+			Socket socketSolicitarTicket = new Socket(ipPantalla, puertoPantalla);
+			
+			PaqueteDatos pd = new PaqueteDatos();
+			pd.setComando(12); // 12 TURNO
+			pd.setIp(ipCliente);
+			
+			ObjectOutputStream oos_llamar_nticket = new ObjectOutputStream(socketSolicitarTicket.getOutputStream());
+			oos_llamar_nticket.writeObject(pd);	
+			oos_llamar_nticket.close();
 		
-		PaqueteDatos pd = new PaqueteDatos();
-		pd.setComando(12); // 12 TURNO
-		pd.setIp(ipCliente);
-		
-		ObjectOutputStream oos_llamar_nticket = new ObjectOutputStream(socketSolicitarTicket.getOutputStream());
-		oos_llamar_nticket.writeObject(pd);	
-		oos_llamar_nticket.close();
-		
-	} catch (UnknownHostException e) {
-		e.printStackTrace();
-	} catch (IOException e) {
-		e.printStackTrace();
-	}	
+		} catch (UnknownHostException e) {
+			JOptionPane.showMessageDialog(null, "Error al solicitar Ticket Turno " + e.getMessage());
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "Error al solicitar Ticket turno " + e.getMessage());
+		}	
 	}
 
 	@Override

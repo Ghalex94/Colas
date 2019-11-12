@@ -213,7 +213,7 @@ public class Pantalla extends JFrame implements Runnable {
 			ipPantalla = address.getHostAddress();
 			//System.out.println("IP Local :"+address.getHostAddress());
 		} catch (UnknownHostException e) {
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Error al cargar ip " + e.getMessage());
 		}
 		
 		CargarAtenciones();
@@ -225,8 +225,7 @@ public class Pantalla extends JFrame implements Runnable {
 		try {
 			Runtime.getRuntime().exec("C:\\ReproductorVideo\\Video.exe", null);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Error al cargar el reproductor " + e.getMessage());
 		}
 		this.setAlwaysOnTop(true);	
 	}
@@ -241,6 +240,7 @@ public class Pantalla extends JFrame implements Runnable {
 				ImprimirMensajeEnPantalla(rs.getInt("turno"), rs.getInt("ventanilla"), rs.getInt("tipo"));
 			}
 		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Error al cargar Atenciones " + e.getMessage());
 		}
 	}
 
@@ -364,7 +364,7 @@ public class Pantalla extends JFrame implements Runnable {
 			}
 			
 		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Error al escuchar " + e.getMessage());
 		}		
 	}
 	
@@ -379,9 +379,8 @@ public class Pantalla extends JFrame implements Runnable {
 			rs.next();
 			ultnroticket = rs.getInt("turno");
 			newnroticket = ultnroticket;
-			//JOptionPane.showMessageDialog(null, "Ultimo ingresado: " + ultnroticket);
 		} catch (Exception e) {
-			//JOptionPane.showMessageDialog(null, "No existe ninguna ticket registrado, este será el primero " + e, "Alerta", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, "No existe ninguna ticket registrado, este será el primero " + e, "Alerta", JOptionPane.INFORMATION_MESSAGE);
 		}		
 		return newnroticket;
 	}
@@ -396,7 +395,7 @@ public class Pantalla extends JFrame implements Runnable {
 			nticketprox = rs.getInt("turno");
 			//JOptionPane.showMessageDialog(null, "Ultimo ingresado: " + ultnroticket);
 		} catch (Exception e) {
-			//JOptionPane.showMessageDialog(null, "No existe ninguna ticket registrado, este será el primero " + e, "Alerta", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, "No existe ninguna ticket registrado, este será el primero " + e, "Alerta", JOptionPane.INFORMATION_MESSAGE);
 		}		
 		return nticketprox;
 	}
@@ -573,7 +572,7 @@ public class Pantalla extends JFrame implements Runnable {
 			player.play();
 			
 		} catch (Exception e) {
-			//JOptionPane.showMessageDialog(null, "No se encontro el sonido");
+			JOptionPane.showMessageDialog(null, "No se encontro el sonido");
 		}
 	}
 }
