@@ -54,7 +54,11 @@ public class Pantalla extends JFrame implements Runnable {
 	private JTextField txtCola3;
 	private JTextField txtCola4;
 	private JLabel lblNewLabel;
-
+	private JTextField txtCola5;
+	private JTextField txtCola6;
+	private JTextField txtCola7;
+	private JTextField txtCola8;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -189,7 +193,6 @@ public class Pantalla extends JFrame implements Runnable {
 		this.txtCola8.setBounds(anchoColas*3, altoColas, anchoColas, altoColas);
 		this.contentPane.add(this.txtCola8);
 		
-		
 		cargar();
 	}
 	
@@ -201,10 +204,9 @@ public class Pantalla extends JFrame implements Runnable {
 	int puertoVentanilla = 9002;
 	
 	int ordenCuadros = 1;
-	private JTextField txtCola5;
-	private JTextField txtCola6;
-	private JTextField txtCola7;
-	private JTextField txtCola8;
+	
+	Consultas consultas = new Consultas();
+	
 	
 	public void cargar(){
 		InetAddress address;
@@ -213,7 +215,7 @@ public class Pantalla extends JFrame implements Runnable {
 			ipPantalla = address.getHostAddress();
 			//System.out.println("IP Local :"+address.getHostAddress());
 		} catch (UnknownHostException e) {
-			JOptionPane.showMessageDialog(null, "Error al cargar ip " + e.getMessage());
+			consultas.RegistrarError("Error al cargar ip " + e.getMessage());
 		}
 		
 		CargarAtenciones();
@@ -225,7 +227,7 @@ public class Pantalla extends JFrame implements Runnable {
 		try {
 			Runtime.getRuntime().exec("C:\\ReproductorVideo\\Video.exe", null);
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, "Error al cargar el reproductor " + e.getMessage());
+			consultas.RegistrarError("Error al cargar el reproductor " + e.getMessage());
 		}
 		this.setAlwaysOnTop(true);	
 	}
@@ -240,7 +242,7 @@ public class Pantalla extends JFrame implements Runnable {
 				ImprimirMensajeEnPantalla(rs.getInt("turno"), rs.getInt("ventanilla"), rs.getInt("tipo"));
 			}
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null, "Error al cargar Atenciones " + e.getMessage());
+			consultas.RegistrarError("Error al cargar Atenciones " + e.getMessage());
 		}
 	}
 
@@ -364,7 +366,7 @@ public class Pantalla extends JFrame implements Runnable {
 			}
 			
 		} catch (IOException | ClassNotFoundException e) {
-			JOptionPane.showMessageDialog(null, "Error al escuchar " + e.getMessage());
+			consultas.RegistrarError("Error al escuchar " + e.getMessage());
 		}		
 	}
 	
@@ -380,7 +382,7 @@ public class Pantalla extends JFrame implements Runnable {
 			ultnroticket = rs.getInt("turno");
 			newnroticket = ultnroticket;
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "No existe ninguna ticket registrado, este será el primero " + e, "Alerta", JOptionPane.INFORMATION_MESSAGE);
+			consultas.RegistrarError("No existe ningun ticket registrado, este será el primero. Para ultnroTicket" + e.getMessage());
 		}		
 		return newnroticket;
 	}
@@ -395,7 +397,7 @@ public class Pantalla extends JFrame implements Runnable {
 			nticketprox = rs.getInt("turno");
 			//JOptionPane.showMessageDialog(null, "Ultimo ingresado: " + ultnroticket);
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "No existe ninguna ticket registrado, este será el primero " + e, "Alerta", JOptionPane.INFORMATION_MESSAGE);
+			consultas.RegistrarError("No existe ninguna ticket registrado, este será el primero. Para TicketProximo " + e.getMessage());
 		}		
 		return nticketprox;
 	}
@@ -572,7 +574,7 @@ public class Pantalla extends JFrame implements Runnable {
 			player.play();
 			
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "No se encontro el sonido");
+			consultas.RegistrarError("No se encontro el sonido " + e.getMessage());
 		}
 	}
 }

@@ -44,6 +44,11 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 	private JTextField txtNroAtencion;
 	private JLabel lblA;
 	private JTextField txtNroVentanilla;
+	private JPanel panel;
+	private JComboBox cbTipo;
+	private JTextField txtTipoAtencion;
+	private JLabel lblNewLabel;
+	private JLabel lblsistemaDesarrolladoPor;
 	
 	/**
 	 * Launch the application.
@@ -207,11 +212,6 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 	int puertoPantalla = 9000;
 	int puertoCliente = 9001;
 	int puertoVentanilla = 9002;
-	private JPanel panel;
-	private JComboBox cbTipo;
-	private JTextField txtTipoAtencion;
-	private JLabel lblNewLabel;
-	private JLabel lblsistemaDesarrolladoPor;
 	
 	public void cargar(){
 		this.setLocationRelativeTo(null);
@@ -220,7 +220,7 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 			address = InetAddress.getLocalHost();
 			ipVentanilla = address.getHostAddress();
 		} catch (UnknownHostException e) {
-			JOptionPane.showMessageDialog(null, "Error al cargar ip " + e.getMessage());
+			//JOptionPane.showMessageDialog(null, "Error al cargar ip " + e.getMessage());
 		}
 		
 		Thread mihilo = new Thread(this);
@@ -276,9 +276,9 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 					oos_llamar_nticket.close();
 					
 				} catch (UnknownHostException e) {
-					JOptionPane.showMessageDialog(null, "Error al llamar al Siguiente " + e.getMessage());
+					//JOptionPane.showMessageDialog(null, "Error al llamar al Siguiente " + e.getMessage());
 				} catch (IOException e) {
-					JOptionPane.showMessageDialog(null, "Error al llamar al siguiente " + e.getMessage());
+					//JOptionPane.showMessageDialog(null, "Error al llamar al siguiente " + e.getMessage());
 				}
 			}
 		}
@@ -308,9 +308,9 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 				oos_indicar_ausente.close();
 				
 			} catch (UnknownHostException e) {
-				JOptionPane.showMessageDialog(null, "Error al Rellamar " + e.getMessage());
+				//JOptionPane.showMessageDialog(null, "Error al Rellamar " + e.getMessage());
 			} catch (IOException e) {
-				JOptionPane.showMessageDialog(null, "Error al rellamar " + e.getMessage());
+				//JOptionPane.showMessageDialog(null, "Error al rellamar " + e.getMessage());
 			}
 		}
 	}
@@ -340,9 +340,9 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 				ActivarLlamar();
 				
 			} catch (UnknownHostException e) {
-				JOptionPane.showMessageDialog(null, "Error al Marcar como ausente " + e.getMessage());
+				//JOptionPane.showMessageDialog(null, "Error al Marcar como ausente " + e.getMessage());
 			} catch (IOException e) {
-				JOptionPane.showMessageDialog(null, "Error al marcar como ausente" + e.getMessage());
+				//JOptionPane.showMessageDialog(null, "Error al marcar como ausente" + e.getMessage());
 			}
 		}
 	}
@@ -372,9 +372,9 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 				ActivarLlamar();
 				
 			} catch (UnknownHostException e) {
-				JOptionPane.showMessageDialog(null, "Error al Marcar como atendido" + e.getMessage());
+			//	JOptionPane.showMessageDialog(null, "Error al Marcar como atendido" + e.getMessage());
 			} catch (IOException e) {
-				JOptionPane.showMessageDialog(null, "Error al marcar como atendido" + e.getMessage());
+			//	JOptionPane.showMessageDialog(null, "Error al marcar como atendido" + e.getMessage());
 			}
 		}
 	}
@@ -414,7 +414,7 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 			}
 		}
 		catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Error al escuchar " + e.getMessage());
+			//JOptionPane.showMessageDialog(null, "Error al escuchar " + e.getMessage());
 		}
 	}
 	public void mouseClicked(MouseEvent arg0) {

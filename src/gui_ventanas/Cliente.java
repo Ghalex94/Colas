@@ -58,7 +58,15 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 	private JPanel contentPane;
 	private JButton btnSolicitarTicketVentanilla;
 	private JLabel lblLogo;
-
+	private JLabel lblTitulo;
+	private JLabel lblInformacion;
+	private JButton btnSolicitarTicketCaja;
+	private JTextField textField;
+	private JPanel panelTitulo;
+	private JButton btnTurno;
+	private JLabel lblsistemaDesarrolladoPor;
+	private JButton btnCerrar;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -193,8 +201,6 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 		lblsistemaDesarrolladoPor.setBounds(208, 717, 597, 30);
 		contentPane.add(lblsistemaDesarrolladoPor);
 		
-		
-		
 		cargar();
 	}
 	
@@ -205,25 +211,15 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 	int puertoPantalla = 9000;
 	int puertoCliente = 9001;
 	int puertoVentanilla = 9002;
-	private JLabel lblTitulo;
-	private JLabel lblInformacion;
-	private JButton btnSolicitarTicketCaja;
-	private JTextField textField;
-	private JPanel panelTitulo;
-	private JButton btnTurno;
-	private JLabel lblsistemaDesarrolladoPor;
-	private JButton btnCerrar;
 	
 	private void cargar(){
 		InetAddress address;
 		try {
 			address = InetAddress.getLocalHost();
 			ipCliente = address.getHostAddress();
-			//System.out.println("IP Local :"+address.getHostAddress());
 		} catch (UnknownHostException e) {
-			JOptionPane.showMessageDialog(null, "Error al cargar " + e.getMessage());
+			//JOptionPane.showMessageDialog(null, "Error al cargar " + e.getMessage());
 		}
-		
 		
 		Thread mihilo = new Thread(this);
 		mihilo.start();
@@ -242,9 +238,9 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 			oos_llamar_nticket.close();
 			
 		} catch (UnknownHostException e) {
-			JOptionPane.showMessageDialog(null, "Error al solicitar Ticket " + e.getMessage());
+			//JOptionPane.showMessageDialog(null, "Error al solicitar Ticket " + e.getMessage());
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, "Error al solicitar ticket " + e.getMessage());
+			//JOptionPane.showMessageDialog(null, "Error al solicitar ticket " + e.getMessage());
 		}
 	}
 
@@ -261,9 +257,9 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 			oos_llamar_nticket.close();
 			
 		} catch (UnknownHostException e) {
-			JOptionPane.showMessageDialog(null, "Error al solicitar Ticket Caja " + e.getMessage());
+			//JOptionPane.showMessageDialog(null, "Error al solicitar Ticket Caja " + e.getMessage());
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, "Error al solicitar Ticket caja" + e.getMessage());
+			//JOptionPane.showMessageDialog(null, "Error al solicitar Ticket caja" + e.getMessage());
 		}	
 	}
 	
@@ -280,9 +276,9 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 			oos_llamar_nticket.close();
 		
 		} catch (UnknownHostException e) {
-			JOptionPane.showMessageDialog(null, "Error al solicitar Ticket Turno " + e.getMessage());
+			//JOptionPane.showMessageDialog(null, "Error al solicitar Ticket Turno " + e.getMessage());
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, "Error al solicitar Ticket turno " + e.getMessage());
+			//JOptionPane.showMessageDialog(null, "Error al solicitar Ticket turno " + e.getMessage());
 		}	
 	}
 
@@ -305,7 +301,7 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 				ImprimirTicket(nticket, tipo);
 			}
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Error al obtener Nro ticket " + e.getMessage());
+			//JOptionPane.showMessageDialog(null, "Error al obtener Nro ticket " + e.getMessage());
 		}
 	}
 	
@@ -336,11 +332,11 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 				JasperPrintManager.printReport(impressao, false);
 			}
 			catch (JRException ex){
-				JOptionPane.showMessageDialog(null, "Error iReport: " + ex.getMessage() );
+				//JOptionPane.showMessageDialog(null, "Error iReport: " + ex.getMessage() );
 			}
-			JOptionPane.showMessageDialog(null, "\nNRO ATENCIÓN:   " + tipoNombre + " - " + nticket + "\n \nSi la máquina no imprimió su ticket, por favor llame a un encargado", "Información", JOptionPane.INFORMATION_MESSAGE);
+			//JOptionPane.showMessageDialog(null, "\nNRO ATENCIÓN:   " + tipoNombre + " - " + nticket + "\n \nSi la máquina no imprimió su ticket, por favor llame a un encargado", "Información", JOptionPane.INFORMATION_MESSAGE);
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "ERROR2 "+ e.getMessage());
+			//JOptionPane.showMessageDialog(null, "ERROR2 "+ e.getMessage());
 		}	
 	}
 	public void mouseClicked(MouseEvent e) {

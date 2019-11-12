@@ -15,7 +15,23 @@ import javax.swing.JOptionPane;
 import mysql.MySQLConexion;
 
 public class Consultas {
+
+	Consultas consultas = null;
+
 	
+	public void RegistrarError(String error){
+		Connection con = MySQLConexion.getConection();
+		java.sql.Statement st;
+		try {
+			st = con.createStatement();
+			String sql = "insert into tb_errores (error, fecha)" + " values (?, default)";
+			PreparedStatement prepareStmt = con.prepareStatement(sql);
+			prepareStmt.setString(1, error);
+			prepareStmt.execute();
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "ERROR al registrar ventanilla: " + e.getMessage());
+		}
+	}
 	public ResultSet ObtenerUltNroTicket(){		
 		Connection con = MySQLConexion.getConection();
 		java.sql.Statement st;
@@ -24,7 +40,7 @@ public class Consultas {
 			st = con.createStatement();
 			rs = st.executeQuery("select turno from tb_colas order by turno desc LIMIT 1");
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Error al obtener ultimo ticket " + e, null, JOptionPane.ERROR_MESSAGE);
+			consultas.RegistrarError("Error al obtener ultimo ticket  " + e.getMessage());
 		}
 		return rs;
 	}
@@ -38,7 +54,7 @@ public class Consultas {
 			rs = st.executeQuery("select turno from tb_colas  where fecha = CURDATE() and tipo = " + tipo + " order by turno desc LIMIT 1;");
 			
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Error al obtener ultimo ticket " + e, null, JOptionPane.ERROR_MESSAGE);
+			consultas.RegistrarError("Error al obtener ultimo ticket hoy  " + e.getMessage());
 		}
 		return rs;
 	}
@@ -49,9 +65,9 @@ public class Consultas {
 		ResultSet rs = null;
 		try {
 			st = con.createStatement();
-			rs = st.executeQuery("select * from tb_colas where estado != 0 and fecha = CURDATE() order by turno desc LIMIT 4");
+			rs = st.executeQuery("select * from tb_colas where estado != 0 and fecha = CURDATE() order by turno desc LIMIT 8");
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Error al obtener proximo ticket " + e, null, JOptionPane.ERROR_MESSAGE);
+			consultas.RegistrarError("Error al obtener ultima pantalla " + e.getMessage());
 		}
 		return rs;
 	}
@@ -64,7 +80,7 @@ public class Consultas {
 			st = con.createStatement();
 			rs = st.executeQuery("select turno from tb_colas where estado = 0 and fecha = CURDATE() and tipo = " + tipo + " order by turno asc LIMIT 1");
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Error al obtener proximo ticket " + e, null, JOptionPane.ERROR_MESSAGE);
+			consultas.RegistrarError("Error al obtener proximo ticket " + e.getMessage());
 		}
 		return rs;
 	}
@@ -85,7 +101,7 @@ public class Consultas {
 			prepareStmt.execute();
 			//JOptionPane.showMessageDialog(null, "TICKET REGISTRADO");
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "ERROR al registrar ticket: " + e);
+			consultas.RegistrarError("ERROR al registrar ticket: " + e.getMessage());
 		}
 	}
 	
@@ -102,7 +118,7 @@ public class Consultas {
 			prepareStmt.execute();
 			//JOptionPane.showMessageDialog(null, "TICKET REGISTRADO");
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "ERROR al registrar ventanilla: " + e);
+			consultas.RegistrarError("ERROR al registrar ventanilla: " + e.getMessage());
 		}
 	}
 	
@@ -121,7 +137,7 @@ public class Consultas {
 			prepareStmt.execute();
 			//JOptionPane.showMessageDialog(null, "Actualizado");
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "ERROR al actualizar ticket: " + e);
+			consultas.RegistrarError("ERROR al actualizar ticket: " + e.getMessage());
 		}
 	}	
 }
