@@ -334,7 +334,7 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 			catch (JRException ex){
 				//JOptionPane.showMessageDialog(null, "Error iReport: " + ex.getMessage() );
 			}
-			//JOptionPane.showMessageDialog(null, "\nNRO ATENCIÓN:   " + tipoNombre + " - " + nticket + "\n \nSi la máquina no imprimió su ticket, por favor llame a un encargado", "Información", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, "\nNRO ATENCIÓN:   " + tipoNombre + " - " + nticket + "\n \nSi la máquina no imprimió su ticket, por favor llame a un encargado", "Información", JOptionPane.INFORMATION_MESSAGE);
 		} catch (Exception e) {
 			//JOptionPane.showMessageDialog(null, "ERROR2 "+ e.getMessage());
 		}	

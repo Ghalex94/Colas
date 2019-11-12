@@ -6,17 +6,16 @@ create table tb_colas(
 idcola		int auto_increment,
 turno		int,
 fecha		date,
-tipo 	 	int, -- 1VENTANILLA 2CAJA
+tipo 	 	int, -- 1VENTANILLA 2CAJA --3TURNO
 estado		int,  -- 0LIBRE 1ATENDIENDO 2AUSENTE 3ATENDIDO
 ventanilla	int,
 primary key (idcola,turno)
 );
 
-create table tb_ventanilla(
-ip			varchar(20),
-tipo		int,
-ventanilla	int,
-primary key (ip, tipo)
+create table tb_errores(
+id	 		int primary key auto_increment,
+error		varchar(200),
+fecha		timestamp
 );
 
 
@@ -28,12 +27,9 @@ insert into tb_colas values(null, 10, '2019-11-06', 1, 0, 13);
 
 insert into tb_colas values(null, 50, '2019-11-08', 1, 3, 10);
 
-insert into tb_colas values(null, 1, '2019-11-08', 2, 0, 0);
+insert into tb_colas values(null, 1, '2019-11-12', 1, 1, 15);
 
 
-insert into tb_ventanilla values('192.168.1.1', 1, 5);
-insert into tb_ventanilla values('192.168.1.1', 2, 5);
-insert into tb_ventanilla values('192.168.1.4', 1, 40);
 
 
 SET SQL_SAFE_UPDATES = 0;
@@ -61,6 +57,6 @@ select ip from tb_ventanilla where ip = '192.168.1.1' and tipo;
 
 select tipo, turno, ventanilla, estado, fecha from tb_colas where fecha between '2019-11-08'  and '2019-11-09' order by tipo;
 
-select * from tb_ventanilla;
+select * from tb_colas;
 
 drop database db_colas;
