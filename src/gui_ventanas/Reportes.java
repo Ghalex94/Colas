@@ -18,6 +18,7 @@ import clases.AbstractJasperReports;
 import mysql.MySQLConexion;
 
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.sql.Connection;
 import java.util.Calendar;
 import java.util.HashMap;

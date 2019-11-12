@@ -198,7 +198,8 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 		cargar();
 	}
 	
-	String ipPantalla = "192.168.70.100";
+	//String ipPantalla = "192.168.70.100";
+	String ipPantalla = "192.168.0.200";
 	String ipCliente = null;
 	
 	int puertoPantalla = 9000;

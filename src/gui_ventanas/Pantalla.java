@@ -468,9 +468,6 @@ public class Pantalla extends JFrame implements Runnable {
 			txtCola8.setText(tipoVentanilla + nticketprox + "  ->  " + ventanilla);
 			ordenCuadros = 1;
 			break;
-
-		default:
-			break;
 		}
 	}
 	
