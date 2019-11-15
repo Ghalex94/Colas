@@ -205,11 +205,12 @@ public class Pantalla extends JFrame implements Runnable {
 	
 	int ordenCuadros = 1;
 	
-	Consultas consultas = new Consultas();
 	
 	
 	public void cargar(){
 		InetAddress address;
+		Consultas consultas = new Consultas();
+		consultas.iniciar();
 		try {
 			address = InetAddress.getLocalHost();
 			ipPantalla = address.getHostAddress();
@@ -230,10 +231,12 @@ public class Pantalla extends JFrame implements Runnable {
 			consultas.RegistrarError("Error al cargar el reproductor " + e.getMessage());
 		}
 		this.setAlwaysOnTop(true);	
+		consultas.reset();
 	}
 	
 	public void CargarAtenciones(){
 		Consultas consulta = new Consultas();
+		consulta.iniciar();
 		ResultSet rs = consulta.ObtenerUltimaPantallaTurnos();
 		try {
 			rs.last();
@@ -242,15 +245,24 @@ public class Pantalla extends JFrame implements Runnable {
 				ImprimirMensajeEnPantalla(rs.getInt("turno"), rs.getInt("ventanilla"), rs.getInt("tipo"));
 			}
 		} catch (SQLException e) {
-			consultas.RegistrarError("Error al cargar Atenciones " + e.getMessage());
+			consulta.RegistrarError("Error al cargar Atenciones " + e.getMessage());
+		}
+		try {
+			rs.close();
+			consulta.reset();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 
 	@Override
 	public void run() {
+		Consultas consultas = new Consultas();
+		consultas.iniciar();
+			
 		try {
 			ServerSocket serverPantalla = new ServerSocket(puertoPantalla);
-			
+
 			while(true){
 				Socket socketPantalla = serverPantalla.accept();
 				
@@ -367,29 +379,37 @@ public class Pantalla extends JFrame implements Runnable {
 			
 		} catch (IOException | ClassNotFoundException e) {
 			consultas.RegistrarError("Error al escuchar " + e.getMessage());
-		}		
+		}
+		consultas.reset();
 	}
 	
 	public int ObtenerUltNroTicket(int tipo){
 		ResultSet rs = null;
 		Consultas consulta = new Consultas();
+		consulta.iniciar();
 		rs = consulta.ObtenerUltNroTicketHoy(tipo);
 		int ultnroticket = -1;
 		int newnroticket = 0;
-		
 		try {
 			rs.next();
 			ultnroticket = rs.getInt("turno");
 			newnroticket = ultnroticket;
 		} catch (Exception e) {
-			consultas.RegistrarError("No existe ningun ticket registrado, este será el primero. Para ultnroTicket" + e.getMessage());
-		}		
+			consulta.RegistrarError("No existe ningun ticket registrado, este será el primero. Para ultnroTicket" + e.getMessage());
+		}
+		try {
+			rs.close();
+			consulta.reset();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return newnroticket;
 	}
 	
 	public int ObtenerTicketProximo(int tipo){
 		ResultSet rs = null;
 		Consultas consulta = new Consultas();
+		consulta.iniciar();
 		rs = consulta.ObtenerTicketProximo(tipo);
 		int nticketprox = -1;
 		try {
@@ -397,24 +417,36 @@ public class Pantalla extends JFrame implements Runnable {
 			nticketprox = rs.getInt("turno");
 			//JOptionPane.showMessageDialog(null, "Ultimo ingresado: " + ultnroticket);
 		} catch (Exception e) {
-			consultas.RegistrarError("No existe ninguna ticket registrado, este será el primero. Para TicketProximo " + e.getMessage());
-		}		
+			consulta.RegistrarError("No existe ninguna ticket registrado, este será el primero. Para TicketProximo " + e.getMessage());
+		}
+		try {
+			rs.close();
+			consulta.reset();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return nticketprox;
 	}
 	
 	public void RegistrarAtencion(int nroticket, int tipo){
 		Consultas consulta = new Consultas();
+		consulta.iniciar();
 		consulta.RegistrarAtencion(nroticket, tipo);
+		consulta.reset();
 	}
 	
 	public void ActualizarEstadoTicket(int nticketprox, int estado, int ventanilla, int tipo){
 		Consultas consulta = new Consultas();
+		consulta.iniciar();
 		consulta.ActualizarEstadoTicket(nticketprox, estado, ventanilla, tipo);
+		consulta.reset();
 	}
 	
 	public void RegistrarVentanilla(String ipRecibida, int tipo, int nventanilla){
 		Consultas consulta = new Consultas();
+		consulta.iniciar();
 		RegistrarVentanilla(ipRecibida, tipo, nventanilla);
+		consulta.reset();
 	}
 	
 	public void ImprimirMensajeEnPantalla(int nticketprox, int ventanilla, int tipo){
@@ -561,9 +593,11 @@ public class Pantalla extends JFrame implements Runnable {
 	}
 	
 	public void ReproducirAlerta(){
+		Consultas consultas = new Consultas();
+		consultas.iniciar();
 		try {
 			FileInputStream direccion;
-			ClassLoader classLoader = getClass().getClassLoader();
+			//ClassLoader classLoader = getClass().getClassLoader();
 			File file = new File("C:/ReproductorVideo/turno.mp3");
 			//System.out.println(file);
 			direccion = new FileInputStream(file);
@@ -576,32 +610,6 @@ public class Pantalla extends JFrame implements Runnable {
 		} catch (Exception e) {
 			consultas.RegistrarError("No se encontro el sonido " + e.getMessage());
 		}
+		consultas.reset();
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

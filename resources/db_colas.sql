@@ -57,6 +57,13 @@ select ip from tb_ventanilla where ip = '192.168.1.1' and tipo;
 
 select tipo, turno, ventanilla, estado, fecha from tb_colas where fecha between '2019-11-08'  and '2019-11-09' order by tipo;
 
+update tb_colas set estado=2, ventanilla=20 where turno = 18 and fecha = CURDATE()  and tipo = 1;
+
 select * from tb_colas;
 
+select * from tb_errores;
+
+show status like 'Threads%';
+
 drop database db_colas;
+

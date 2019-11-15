@@ -204,7 +204,7 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 		cargar();
 	}
 	//String ipPantalla = "192.168.70.100";
-	String ipPantalla = "192.168.0.200";
+	String ipPantalla = "192.168.1.46";
 	String ipVentanilla = null;
 	int tipo = -1;
 	int nroVentanilla = -1;
@@ -321,7 +321,7 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 		if(cbTipo.getSelectedIndex() == 0 || txtNroVentanilla.getText().equals("Ingrese nro"))
 			JOptionPane.showMessageDialog(null, "Seleccione los datos correctamente", "Alerta", JOptionPane.ERROR_MESSAGE);
 		else{
-			tipo = cbTipo.getSelectedIndex()+1;
+			tipo = cbTipo.getSelectedIndex();
 			nroVentanilla = Integer.parseInt(txtNroVentanilla.getText());
 			
 			int ticketactual = Integer.parseInt(txtNroAtencion.getText());
