@@ -44,7 +44,7 @@ public class Consultas {
 			pst.setString(1, error);
 			pst.execute();
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "ERROR al registrar ventanilla: " + e.getMessage());
+			//JOptionPane.showMessageDialog(null, "ERROR al registrar error: " + e.getMessage());
 		}
 	}
 	public ResultSet ObtenerUltNroTicket(){	
@@ -133,7 +133,7 @@ public class Consultas {
 			pst.setInt(3, nticket);
 			pst.setInt(4, tipo);
 			pst.execute();
-			JOptionPane.showMessageDialog(null, "Actualizado " + estado);
+			//JOptionPane.showMessageDialog(null, "Actualizado " + estado);
 		} catch (Exception e) {
 			consultas.RegistrarError("ERROR al actualizar ticket: " + e.getMessage());
 		}

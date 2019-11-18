@@ -154,6 +154,7 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 		this.panel.setLayout(null);
 		
 		this.cbTipo = new JComboBox();
+		cbTipo.setEnabled(false);
 		cbTipo.setForeground(new Color(220, 20, 60));
 		this.cbTipo.setModel(new DefaultComboBoxModel(new String[] {"Seleccione un tipo", "VENTANILLA", "CAJA", "TURNO"}));
 		this.cbTipo.setFont(new Font("Tahoma", Font.BOLD, 15));
@@ -165,7 +166,7 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 		this.txtNroVentanilla.setBounds(10, 12, 210, 35);
 		this.panel.add(this.txtNroVentanilla);
 		this.txtNroVentanilla.setHorizontalAlignment(SwingConstants.CENTER);
-		this.txtNroVentanilla.setText("Ingrese nro");
+		this.txtNroVentanilla.setText("Ingrese su nro");
 		this.txtNroVentanilla.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
@@ -203,8 +204,8 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 		contentPane.add(lblsistemaDesarrolladoPor);
 		cargar();
 	}
-	//String ipPantalla = "192.168.70.100";
-	String ipPantalla = "192.168.1.46";
+	String ipPantalla = "192.168.70.100";
+	//String ipPantalla = "192.168.1.46";
 	String ipVentanilla = null;
 	int tipo = -1;
 	int nroVentanilla = -1;
@@ -225,14 +226,14 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 		
 		Thread mihilo = new Thread(this);
 		mihilo.start();
-		cbTipo.setSelectedIndex(0);
+		cbTipo.setSelectedIndex(3);
 	}
 	
 	protected void keyTypedTxtNroVentanilla(KeyEvent e) {
 		char c = e.getKeyChar();
 		if ((c<'0' || c>'9') && (c!=(char)KeyEvent.VK_DELETE) && (c!=(char)KeyEvent.VK_BACK_SPACE) && (c!=(char)KeyEvent.VK_ENTER))
 			e.consume();
-		if(txtNroVentanilla.getText().equals("Ingrese nro"))
+		if(txtNroVentanilla.getText().equals("Ingrese su nro"))
 			txtNroVentanilla.setText(null);
 	}
 	
@@ -251,11 +252,12 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 	}
 	
 	protected void actionPerformedBtnLlamarSiguiente(ActionEvent ex) {
-		if(txtNroVentanilla.getText().equals("Ingrese nro"))
+		if(txtNroVentanilla.getText().equals("Ingrese su nro"))
 			JOptionPane.showMessageDialog(null, "Por favor, ingrese su número de ventanilla.", "Alerta", JOptionPane.ERROR_MESSAGE);
 		if(cbTipo.getSelectedIndex() == 0)
 			JOptionPane.showMessageDialog(null, "Por favor, indique el tipo de ventanilla", "Alerta", JOptionPane.ERROR_MESSAGE);
 		else{
+			nroVentanilla = Integer.parseInt(txtNroVentanilla.getText());
 			if(nroVentanilla >= 30)
 				JOptionPane.showMessageDialog(null, "No tiene permiso para crear mas de 30 módulos", "Alerta", JOptionPane.ERROR_MESSAGE);
 			else{

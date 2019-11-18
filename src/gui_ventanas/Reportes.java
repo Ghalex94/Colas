@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.awt.event.ActionEvent;
 
-public class Reportes extends JFrame {
+public class Reportes extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
 	private JButton btnVerTotal;
@@ -34,6 +34,7 @@ public class Reportes extends JFrame {
 	private JDateChooser dchInicio;
 	private JDateChooser dchFin;
 	private JLabel label;
+	private JButton btnVerConteo;
 
 	/**
 	 * Launch the application.
@@ -57,7 +58,7 @@ public class Reportes extends JFrame {
 	public Reportes() {
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 408, 259);
+		setBounds(100, 100, 408, 315);
 		this.contentPane = new JPanel();
 		this.contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(this.contentPane);
@@ -101,6 +102,14 @@ public class Reportes extends JFrame {
 		this.label.setFont(new Font("Tw Cen MT", Font.BOLD, 28));
 		this.label.setBounds(165, 84, 72, 38);
 		this.contentPane.add(this.label);
+		
+		btnVerConteo = new JButton("Ver conteo");
+		btnVerConteo.addActionListener(this);
+		btnVerConteo.setForeground(Color.WHITE);
+		btnVerConteo.setFont(new Font("Tahoma", Font.BOLD, 18));
+		btnVerConteo.setBackground(new Color(30, 144, 255));
+		btnVerConteo.setBounds(24, 219, 354, 45);
+		contentPane.add(btnVerConteo);
 	}
 	
 	protected void actionPerformedBtnVerTotal(ActionEvent arg0) {
@@ -131,5 +140,41 @@ public class Reportes extends JFrame {
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "No se encontraron datos registrados en estas fechas" + e);
 		}
+	}
+	public void actionPerformed(ActionEvent arg0) {
+		if (arg0.getSource() == btnVerConteo) {
+			actionPerformedBtnVerConteo(arg0);
+		}
+	}
+	
+	protected void actionPerformedBtnVerConteo(ActionEvent arg0) {
+		Connection con = null;
+		try {
+			con = MySQLConexion.getConection();
+
+			int añoi = dchInicio.getCalendar().get(Calendar.YEAR);
+			int mesi = dchInicio.getCalendar().get(Calendar.MARCH) + 1;
+			int diai = dchInicio.getCalendar().get(Calendar.DAY_OF_MONTH);
+			//String fechai = añoi + "-" + mesi + "-" + diai + " 00:00:00";
+			String fechai = añoi + "-" + mesi + "-" + diai;
+
+			int añof = dchFin.getCalendar().get(Calendar.YEAR);
+			int mesf = dchFin.getCalendar().get(Calendar.MARCH) + 1;
+			int diaf = dchFin.getCalendar().get(Calendar.DAY_OF_MONTH);
+			//String fechaf = añof + "-" + mesf + "-" + diaf + " 23:59:59";
+			String fechaf = añof + "-" + mesf + "-" + diaf;
+			
+			Map parameters = new HashMap();
+			parameters.put("prtFechaI", fechai);
+			parameters.put("prtFechaF", fechaf);
+
+			new AbstractJasperReports().createReport(con, "rAtenciones.jasper", parameters);	
+			AbstractJasperReports.showViewer();
+			
+			con.close();
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "No se encontraron datos registrados en estas fechas" + e);
+		}
+		
 	}
 }
