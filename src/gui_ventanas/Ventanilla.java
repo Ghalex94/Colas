@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import clases.Control;
 import clases.PaqueteDatos;
 
 import javax.swing.JButton;
@@ -33,6 +34,8 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 
@@ -70,6 +73,12 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 	 * Create the frame.
 	 */
 	public Ventanilla() {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+				windowClosingThis(arg0);
+			}
+		});
 		setTitle("Sistema de Colas");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -160,6 +169,7 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 		this.cbTipo.setFont(new Font("Tahoma", Font.BOLD, 15));
 		this.cbTipo.setBackground(SystemColor.control);
 		this.cbTipo.setBounds(233, 11, 210, 36);
+		this.cbTipo.setSelectedIndex(3);
 		this.panel.add(this.cbTipo);
 		
 		this.txtNroVentanilla = new JTextField();
@@ -215,18 +225,23 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 	int puertoVentanilla = 9002;
 	
 	public void cargar(){
-		this.setLocationRelativeTo(null);
-		InetAddress address;
-		try {
-			address = InetAddress.getLocalHost();
-			ipVentanilla = address.getHostAddress();
-		} catch (UnknownHostException e) {
-			//JOptionPane.showMessageDialog(null, "Error al cargar ip " + e.getMessage());
-		}
-		
-		Thread mihilo = new Thread(this);
-		mihilo.start();
-		cbTipo.setSelectedIndex(3);
+		 
+        if( new Control().comprobar() ){
+        	this.setLocationRelativeTo(null);
+    		InetAddress address;
+    		try {
+    			address = InetAddress.getLocalHost();
+    			ipVentanilla = address.getHostAddress();
+    		} catch (UnknownHostException e) {
+    			//JOptionPane.showMessageDialog(null, "Error al cargar ip " + e.getMessage());
+    		}
+    		
+    		Thread mihilo = new Thread(this);
+    		mihilo.start();
+        }        
+        else{
+            System.exit(0);
+        }	
 	}
 	
 	protected void keyTypedTxtNroVentanilla(KeyEvent e) {
@@ -441,5 +456,9 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 		Creditos el = new Creditos();
 		el.setLocationRelativeTo(null);
 		el.setVisible(true);
+	}
+	protected void windowClosingThis(WindowEvent arg0) {
+		//GEN-FIRST:event_btnCerrarActionPerformed
+        new Control().cerrarApp();          
 	}
 }
