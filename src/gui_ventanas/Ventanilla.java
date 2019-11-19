@@ -26,6 +26,8 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URL;
+import java.net.URLConnection;
 import java.net.UnknownHostException;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
@@ -225,23 +227,62 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 	int puertoVentanilla = 9002;
 	
 	public void cargar(){
-		 
         if( new Control().comprobar() ){
-        	this.setLocationRelativeTo(null);
-    		InetAddress address;
-    		try {
-    			address = InetAddress.getLocalHost();
-    			ipVentanilla = address.getHostAddress();
-    		} catch (UnknownHostException e) {
-    			//JOptionPane.showMessageDialog(null, "Error al cargar ip " + e.getMessage());
-    		}
-    		
-    		Thread mihilo = new Thread(this);
-    		mihilo.start();
+        	int confirma = ComprobarConexion();
+        	if(confirma == 0){
+        		JOptionPane.showMessageDialog(null, "NO EXISTE CONEXIÓN, POR FAVOR VERIFIQUE", null, JOptionPane.ERROR_MESSAGE);
+        		new Control().cerrarApp();
+        		System.exit(0);
+        	}
+        	else{
+	        	this.setLocationRelativeTo(null);
+	    		InetAddress address;
+	    		try {
+	    			address = InetAddress.getLocalHost();
+	    			ipVentanilla = address.getHostAddress();
+	    		} catch (UnknownHostException e) {
+	    			//JOptionPane.showMessageDialog(null, "Error al cargar ip " + e.getMessage());
+	    		}
+	    		
+	    		Thread mihilo = new Thread(this);
+	    		mihilo.start();
+        	}
         }        
         else{
+        	new Control().cerrarApp();
             System.exit(0);
         }	
+	}
+	
+	public int ComprobarConexion(){
+		String dirWeb = "www.google.com";
+		/*int puerto = 80;
+		int confirma = 0;
+		try{
+		  Socket s = new Socket(dirWeb, puerto);
+		  if(s.isConnected()){
+			  confirma = 1; // si hay
+			  //System.out.println("Conexión establecida con la dirección: " +  dirWeb + " a travéz del puerto: " + puerto);
+			}
+		}catch(Exception e){
+			confirma = 0; // no hay
+			//System.err.println("No se pudo establecer conexión con: " + dirWeb + " a travez del puerto: " + puerto);
+		}*/
+		
+		int confirma;
+        try {
+
+            URL ruta=new URL("http://www.google.es");
+            URLConnection rutaC=ruta.openConnection();
+            rutaC.connect();
+            confirma = 1;
+           }catch(Exception e){
+        	   confirma = 0;
+        }
+
+		
+		
+		return confirma;
 	}
 	
 	protected void keyTypedTxtNroVentanilla(KeyEvent e) {
@@ -459,6 +500,6 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 	}
 	protected void windowClosingThis(WindowEvent arg0) {
 		//GEN-FIRST:event_btnCerrarActionPerformed
-        new Control().cerrarApp();          
+        new Control().cerrarApp();
 	}
 }

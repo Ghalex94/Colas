@@ -18,7 +18,7 @@ public class Control {
     
     //fichero TMP
     private String appPath = System.getProperties().getProperty("user.dir");
-    private File fichero = new File( appPath + "\\miApp.tmp");    
+    private File fichero = new File( appPath + "\\verificador.tmp");    
     //tiempo en que se actualiza el fichero TMP
     private int segundos = 20;
     
@@ -36,7 +36,7 @@ public class Control {
             long res = restarTiempo( tiempo );           
             if( res < segundos )
             {              
-                JOptionPane.showMessageDialog(null,"Error: La aplicacion ya esta en ejecución.");
+                JOptionPane.showMessageDialog(null,"Error: La aplicacion ya está abierta.");
                 return false;
             }
             else
