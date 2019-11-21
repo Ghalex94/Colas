@@ -15,6 +15,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Window.Type;
+import javax.swing.JLabel;
 
 public class numeros extends JFrame {
 
@@ -34,6 +36,7 @@ public class numeros extends JFrame {
 	private JButton boton7;
 
 	Cliente c = null;
+	private JLabel lblNewLabel;
 	
 	/**
 	 * Launch the application.
@@ -55,11 +58,13 @@ public class numeros extends JFrame {
 	 * Create the frame.
 	 */
 	public numeros(Cliente temp) {
+		setUndecorated(true);
+		setType(Type.POPUP);
 		c= temp;
 		
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 301, 395);
+		setBounds(100, 100, 295, 392);
 		this.contentPane = new JPanel();
 		this.contentPane.setBackground(Color.GRAY);
 		this.contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -78,7 +83,7 @@ public class numeros extends JFrame {
 		this.txtNumero.setFont(new Font("Tahoma", Font.BOLD, 15));
 		this.txtNumero.setColumns(10);
 		this.txtNumero.setBackground(Color.DARK_GRAY);
-		this.txtNumero.setBounds(10, 11, 276, 37);
+		this.txtNumero.setBounds(10, 34, 276, 37);
 		this.contentPane.add(this.txtNumero);
 		
 		this.btnOn = new JButton("ACEPTAR");
@@ -90,7 +95,7 @@ public class numeros extends JFrame {
 		this.btnOn.setForeground(Color.WHITE);
 		this.btnOn.setBackground(Color.GREEN);
 		this.btnOn.setFont(new Font("Tahoma", Font.BOLD, 12));
-		this.btnOn.setBounds(194, 283, 92, 75);
+		this.btnOn.setBounds(194, 306, 92, 75);
 		this.contentPane.add(this.btnOn);
 		
 		this.btnBorrar = new JButton("BORRAR");
@@ -102,7 +107,7 @@ public class numeros extends JFrame {
 		this.btnBorrar.setForeground(Color.WHITE);
 		this.btnBorrar.setBackground(Color.RED);
 		this.btnBorrar.setFont(new Font("Tahoma", Font.BOLD, 13));
-		this.btnBorrar.setBounds(10, 283, 92, 75);
+		this.btnBorrar.setBounds(10, 306, 92, 75);
 		this.contentPane.add(this.btnBorrar);
 		
 		this.boton3 = new JButton("3");
@@ -113,7 +118,7 @@ public class numeros extends JFrame {
 		});
 		this.boton3.setBackground(Color.WHITE);
 		this.boton3.setFont(new Font("Tahoma", Font.PLAIN, 30));
-		this.boton3.setBounds(194, 207, 92, 75);
+		this.boton3.setBounds(194, 230, 92, 75);
 		this.contentPane.add(this.boton3);
 		
 		this.boton6 = new JButton("6");
@@ -124,7 +129,7 @@ public class numeros extends JFrame {
 		});
 		this.boton6.setBackground(Color.WHITE);
 		this.boton6.setFont(new Font("Tahoma", Font.PLAIN, 30));
-		this.boton6.setBounds(194, 131, 92, 75);
+		this.boton6.setBounds(194, 154, 92, 75);
 		this.contentPane.add(this.boton6);
 		
 		this.boton9 = new JButton("9");
@@ -135,7 +140,7 @@ public class numeros extends JFrame {
 		});
 		this.boton9.setBackground(Color.WHITE);
 		this.boton9.setFont(new Font("Tahoma", Font.PLAIN, 30));
-		this.boton9.setBounds(194, 56, 92, 75);
+		this.boton9.setBounds(194, 79, 92, 75);
 		this.contentPane.add(this.boton9);
 		
 		this.boton0 = new JButton("0");
@@ -146,7 +151,7 @@ public class numeros extends JFrame {
 		});
 		this.boton0.setBackground(Color.WHITE);
 		this.boton0.setFont(new Font("Tahoma", Font.PLAIN, 30));
-		this.boton0.setBounds(102, 283, 92, 75);
+		this.boton0.setBounds(102, 306, 92, 75);
 		this.contentPane.add(this.boton0);
 		
 		this.boton2 = new JButton("2");
@@ -157,7 +162,7 @@ public class numeros extends JFrame {
 		});
 		this.boton2.setBackground(Color.WHITE);
 		this.boton2.setFont(new Font("Tahoma", Font.PLAIN, 30));
-		this.boton2.setBounds(102, 207, 92, 75);
+		this.boton2.setBounds(102, 230, 92, 75);
 		this.contentPane.add(this.boton2);
 		
 		this.boton5 = new JButton("5");
@@ -168,7 +173,7 @@ public class numeros extends JFrame {
 		});
 		this.boton5.setBackground(Color.WHITE);
 		this.boton5.setFont(new Font("Tahoma", Font.PLAIN, 30));
-		this.boton5.setBounds(102, 131, 92, 75);
+		this.boton5.setBounds(102, 154, 92, 75);
 		this.contentPane.add(this.boton5);
 		
 		this.boton8 = new JButton("8");
@@ -179,7 +184,7 @@ public class numeros extends JFrame {
 		});
 		this.boton8.setBackground(Color.WHITE);
 		this.boton8.setFont(new Font("Tahoma", Font.PLAIN, 30));
-		this.boton8.setBounds(102, 56, 92, 75);
+		this.boton8.setBounds(102, 79, 92, 75);
 		this.contentPane.add(this.boton8);
 		
 		this.boton1 = new JButton("1");
@@ -190,7 +195,7 @@ public class numeros extends JFrame {
 		});
 		this.boton1.setBackground(Color.WHITE);
 		this.boton1.setFont(new Font("Tahoma", Font.PLAIN, 30));
-		this.boton1.setBounds(10, 207, 92, 75);
+		this.boton1.setBounds(10, 230, 92, 75);
 		this.contentPane.add(this.boton1);
 		
 		this.boton4 = new JButton("4");
@@ -201,7 +206,7 @@ public class numeros extends JFrame {
 		});
 		this.boton4.setBackground(Color.WHITE);
 		this.boton4.setFont(new Font("Tahoma", Font.PLAIN, 30));
-		this.boton4.setBounds(10, 131, 92, 75);
+		this.boton4.setBounds(10, 154, 92, 75);
 		this.contentPane.add(this.boton4);
 		
 		this.boton7 = new JButton("7");
@@ -212,8 +217,15 @@ public class numeros extends JFrame {
 		});
 		this.boton7.setBackground(Color.WHITE);
 		this.boton7.setFont(new Font("Tahoma", Font.PLAIN, 30));
-		this.boton7.setBounds(10, 56, 92, 75);
+		this.boton7.setBounds(10, 79, 92, 75);
 		this.contentPane.add(this.boton7);
+		
+		lblNewLabel = new JLabel("Ingrese contrase\u00F1a");
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setForeground(Color.WHITE);
+		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblNewLabel.setBounds(10, 9, 275, 24);
+		contentPane.add(lblNewLabel);
 	}
 	
 	protected void keyTypedTxtNumero(KeyEvent arg0) {
@@ -293,8 +305,12 @@ public class numeros extends JFrame {
 		txtNumero.setText("");
 	}
 	protected void actionPerformedBtnOn(ActionEvent e) {
-		c.nro = Integer.parseInt(txtNumero.getText());
-		c.verificarPass();
+		try {
+			c.nro = Integer.parseInt(txtNumero.getText());
+			c.verificarPass();
+		} catch (Exception e2) {
+		}
+		c.setEnabled(true);
 		this.setAlwaysOnTop(false);
 		this.dispose();
 	}

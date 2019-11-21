@@ -5,7 +5,7 @@ use db_colas;
 create table tb_colas(
 idcola		int auto_increment,
 turno		int,
-fecha		date,
+fecha		timestamp,
 tipo 	 	int, -- 1VENTANILLA 2CAJA --3TURNO
 estado		int,  -- 0LIBRE 1ATENDIENDO 2AUSENTE 3ATENDIDO
 ventanilla	int,
@@ -36,7 +36,9 @@ SET SQL_SAFE_UPDATES = 0;
  
 select turno from tb_colas order by turno desc LIMIT 1;
 
-select turno from tb_colas  where fecha = CURDATE() order by turno desc LIMIT 1;
+select * from tb_colas where DATE(fecha) = CURDATE() order by turno desc LIMIT 1;
+
+select CURDATE();
 
 select turno from tb_colas where estado = 0 order by turno asc LIMIT 1;
 
@@ -59,9 +61,9 @@ select tipo, turno, ventanilla, estado, fecha from tb_colas where fecha between 
 
 update tb_colas set estado=2, ventanilla=20 where turno = 18 and fecha = CURDATE()  and tipo = 1;
 
-select * from tb_colas;
 
-select * from tb_errores;
+
+select * from tb_colas;
 
 show status like 'Threads%';
 

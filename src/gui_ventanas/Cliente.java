@@ -1,6 +1,5 @@
 package gui_ventanas;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import javax.swing.JFrame;
@@ -9,51 +8,49 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import org.apache.poi.hssf.util.HSSFColor.BLACK;
-
+import clases.Control;
 import clases.PaqueteDatos;
-import mysql.MySQLConexion;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperPrintManager;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.util.JRLoader;
-
-import java.awt.Window.Type;
 import java.awt.Frame;
 import java.awt.Image;
 import java.awt.Toolkit;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.Font;
-import javax.swing.UIManager;
 import java.awt.event.ActionListener;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URL;
+import java.net.URLConnection;
 import java.net.UnknownHostException;
 import java.sql.Connection;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import java.awt.Color;
-import java.awt.ComponentOrientation;
 import java.awt.SystemColor;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowListener;
+import java.awt.event.WindowEvent;
 
-public class Cliente extends JFrame implements Runnable, MouseListener, ActionListener {
+public class Cliente extends JFrame implements Runnable, MouseListener, ActionListener, WindowListener {
 
 	private JPanel contentPane;
 	private JButton btnSolicitarTicketVentanilla;
@@ -87,6 +84,7 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 	 * Create the frame.
 	 */
 	public Cliente() {
+		addWindowListener(this);
 		
 		Toolkit t = Toolkit.getDefaultToolkit();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -204,141 +202,6 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 		cargar();
 	}
 	
-	String ipPantalla = "192.168.70.100";
-	//String ipPantalla = "192.168.1.46";
-	String ipCliente = null;
-	
-	int puertoPantalla = 9000;
-	int puertoCliente = 9001;
-	int puertoVentanilla = 9002;
-	
-	private void cargar(){
-		InetAddress address;
-		try {
-			address = InetAddress.getLocalHost();
-			ipCliente = address.getHostAddress();
-		} catch (UnknownHostException e) {
-			//JOptionPane.showMessageDialog(null, "Error al cargar " + e.getMessage());
-		}
-		
-		Thread mihilo = new Thread(this);
-		mihilo.start();
-	}
-
-	protected void actionPerformedBtnSolicitarTicket(ActionEvent arg0) {
-		try {
-			Socket socketSolicitarTicket = new Socket(ipPantalla, puertoPantalla);
-			
-			PaqueteDatos pd = new PaqueteDatos();
-			pd.setComando(10); // 10 VENTANILLA
-			pd.setIp(ipCliente);
-			
-			ObjectOutputStream oos_llamar_nticket = new ObjectOutputStream(socketSolicitarTicket.getOutputStream());
-			oos_llamar_nticket.writeObject(pd);
-			oos_llamar_nticket.close();
-			
-		} catch (UnknownHostException e) {
-			//JOptionPane.showMessageDialog(null, "Error al solicitar Ticket " + e.getMessage());
-		} catch (IOException e) {
-			//JOptionPane.showMessageDialog(null, "Error al solicitar ticket " + e.getMessage());
-		}
-	}
-
-	protected void actionPerformedBtnSolicitarTicketCaja(ActionEvent arg0) {
-		try {
-			Socket socketSolicitarTicket = new Socket(ipPantalla, puertoPantalla);
-			
-			PaqueteDatos pd = new PaqueteDatos();
-			pd.setComando(11); // 11 CAJA
-			pd.setIp(ipCliente);
-			
-			ObjectOutputStream oos_llamar_nticket = new ObjectOutputStream(socketSolicitarTicket.getOutputStream());
-			oos_llamar_nticket.writeObject(pd);	
-			oos_llamar_nticket.close();
-			
-		} catch (UnknownHostException e) {
-			//JOptionPane.showMessageDialog(null, "Error al solicitar Ticket Caja " + e.getMessage());
-		} catch (IOException e) {
-			//JOptionPane.showMessageDialog(null, "Error al solicitar Ticket caja" + e.getMessage());
-		}	
-	}
-	
-	protected void actionPerformedBtnTurno(ActionEvent arg0) {
-		try {
-			Socket socketSolicitarTicket = new Socket(ipPantalla, puertoPantalla);
-			
-			PaqueteDatos pd = new PaqueteDatos();
-			pd.setComando(12); // 12 TURNO
-			pd.setIp(ipCliente);
-			
-			ObjectOutputStream oos_llamar_nticket = new ObjectOutputStream(socketSolicitarTicket.getOutputStream());
-			oos_llamar_nticket.writeObject(pd);	
-			oos_llamar_nticket.close();
-		
-		} catch (UnknownHostException e) {
-			//JOptionPane.showMessageDialog(null, "Error al solicitar Ticket Turno " + e.getMessage());
-		} catch (IOException e) {
-			//JOptionPane.showMessageDialog(null, "Error al solicitar Ticket turno " + e.getMessage());
-		}	
-	}
-
-	@Override
-	public void run() {
-		try{
-			ServerSocket server_Cliente = new ServerSocket(puertoCliente);
-			Socket socket_recibir_nticket;
-			int nticket;
-			int tipo;
-			while(true){
-				socket_recibir_nticket = server_Cliente.accept();
-				PaqueteDatos pd_recibido = new PaqueteDatos();
-				ObjectInputStream ois_recibir = new ObjectInputStream(socket_recibir_nticket.getInputStream());
-				pd_recibido = (PaqueteDatos) ois_recibir.readObject();
-				
-				nticket = pd_recibido.getTicket();
-				tipo = pd_recibido.getTipo();
-				
-				ImprimirTicket(nticket, tipo);
-			}
-		} catch (Exception e) {
-			//JOptionPane.showMessageDialog(null, "Error al obtener Nro ticket " + e.getMessage());
-		}
-	}
-	
-	public void ImprimirTicket(int nticket, int tipo){
-		try {
-			String tipoNombre = null;
-			
-			switch (tipo) {
-			case 1:
-				tipoNombre = "VE";
-				break;
-			case 2:
-				tipoNombre = "CA";
-				break;
-			case 3:
-				tipoNombre = "TU";
-				break;
-			default:
-				break;
-			}
-			
-			Connection con = null;
-			Map<String, Object> parameters = new HashMap();
-			parameters.put("prtNTicket", nticket);
-			parameters.put("prtTipo", tipoNombre);
-			try{
-				JasperPrint impressao = JasperFillManager.fillReport(getClass().getClassLoader().getResourceAsStream("rTicket.jasper"), parameters, new JREmptyDataSource());
-				JasperPrintManager.printReport(impressao, false);
-			}
-			catch (JRException ex){
-				//JOptionPane.showMessageDialog(null, "Error iReport: " + ex.getMessage() );
-			}
-			JOptionPane.showMessageDialog(null, "\nNRO ATENCIÓN:   " + tipoNombre + " - " + nticket + "\n \nSi la máquina no imprimió su ticket, por favor llame a un encargado", "Información", JOptionPane.INFORMATION_MESSAGE);
-		} catch (Exception e) {
-			//JOptionPane.showMessageDialog(null, "ERROR2 "+ e.getMessage());
-		}	
-	}
 	public void mouseClicked(MouseEvent e) {
 		if (e.getSource() == lblsistemaDesarrolladoPor) {
 			mouseClickedLabel(e);
@@ -362,23 +225,256 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 			actionPerformedBtnCerrar(arg0);
 		}
 	}
+	public void windowActivated(WindowEvent arg0) {
+	}
+	public void windowClosed(WindowEvent arg0) {
+	}
+	public void windowClosing(WindowEvent arg0) {
+		if (arg0.getSource() == this) {
+			windowClosingThis(arg0);
+		}
+	}
+	public void windowDeactivated(WindowEvent arg0) {
+	}
+	public void windowDeiconified(WindowEvent arg0) {
+	}
+	public void windowIconified(WindowEvent arg0) {
+	}
+	public void windowOpened(WindowEvent arg0) {
+	}
+	protected void windowClosingThis(WindowEvent arg0) {
+		 new Control().cerrarApp();
+	}
 	
-	public int nro = -1;
+	
+	String ipPantalla = "192.168.70.100";
+	//String ipPantalla = "192.168.1.46";
+	String ipCliente = null;
+	
+	int puertoPantalla = 9000;
+	int puertoCliente = 9001;
+	int puertoVentanilla = 9002;
+	
+	private void cargar(){
+        if( new Control().comprobar() ){
+        	int confirma = ComprobarConexion();
+        	if(confirma == 0){
+        		JOptionPane.showMessageDialog(null, "Por favor verifique su conexión", "Alerta", JOptionPane.ERROR_MESSAGE);
+        		new Control().cerrarApp();
+        		System.exit(0);
+        	}
+        	else{
+				InetAddress address;
+				try {
+					address = InetAddress.getLocalHost();
+					ipCliente = address.getHostAddress();
+				} catch (UnknownHostException e) {
+					RegistrarError("Error al cargar IP: " + ObtenerFechaHora() + " " + e.getMessage() + "\n");
+				}
+				Thread mihilo = new Thread(this);
+				mihilo.start();
+        	}
+        }        
+        else{
+        	new Control().cerrarApp();
+            System.exit(0);
+        }
+	}
+	
+	@Override
+	public void run() {
+		try{
+			ServerSocket server_Cliente = new ServerSocket(puertoCliente);
+			Socket socket_recibir_nticket;
+			int nticket;
+			int tipo;
+			while(true){
+				socket_recibir_nticket = server_Cliente.accept();
+				PaqueteDatos pd_recibido = new PaqueteDatos();
+				ObjectInputStream ois_recibir = new ObjectInputStream(socket_recibir_nticket.getInputStream());
+				pd_recibido = (PaqueteDatos) ois_recibir.readObject();
+				
+				nticket = pd_recibido.getTicket();
+				tipo = pd_recibido.getTipo();
+				
+				ImprimirTicket(nticket, tipo);
+				socket_recibir_nticket.close();
+			}
+		} catch (Exception e) {
+			RegistrarError("Error en run: " + ObtenerFechaHora() + " " + e.getMessage() + "\n");
+		}
+	}
+	
+	public int ComprobarConexion(){
+		int confirma;
+        try {
+            URL ruta=new URL("http://www.google.com");
+            URLConnection rutaC=ruta.openConnection();
+            rutaC.connect();
+            confirma = 1;
+           }catch(Exception e){
+        	   confirma = 0;
+           }		
+		return confirma;
+	}
+
+	public static String ObtenerFechaHora(){
+		Date date = new Date();
+		DateFormat hourdateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		String fechahora = hourdateFormat.format(date);
+		return fechahora;
+	}
+	
+	public static void RegistrarError(String errorMsj) {
+		File directorio=new File("C:\\LogErrores_SistemaColas"); 
+		directorio.mkdirs(); 
+		String nombreArchivo= "C:\\LogErrores_SistemaColas\\log.txt";
+		
+		BufferedWriter bw = null;
+	    FileWriter fw = null;
+        File file = new File(nombreArchivo);
+        try {
+	        if (!file.exists())
+				file.createNewFile();
+	        fw = new FileWriter(file.getAbsoluteFile(), true);
+	        bw = new BufferedWriter(fw);
+	        bw.write(errorMsj);
+        } catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "Error al registrar error1: " + ObtenerFechaHora() + " " + e.getMessage());
+		}
+        finally {
+            try {
+                if (bw != null)
+                    bw.close();
+                if (fw != null)
+                    fw.close();
+            } catch (IOException ex) {
+            	JOptionPane.showMessageDialog(null, "Error al registrar error2: " + ObtenerFechaHora() + " " + ex.getMessage());
+            }
+        }
+	}	
+
+	protected void actionPerformedBtnSolicitarTicket(ActionEvent arg0) {
+		try {
+			Socket socketSolicitarTicket = new Socket(ipPantalla, puertoPantalla);
+			
+			PaqueteDatos pd = new PaqueteDatos();
+			pd.setComando(10); // 10 VENTANILLA
+			pd.setIp(ipCliente);
+			
+			ObjectOutputStream oos_llamar_nticket = new ObjectOutputStream(socketSolicitarTicket.getOutputStream());
+			oos_llamar_nticket.writeObject(pd);
+			socketSolicitarTicket.close();
+			oos_llamar_nticket.close();
+			
+		} catch (UnknownHostException e) {
+			JOptionPane.showMessageDialog(null, "Error al solicitar Ticket Ventanilla1 " + e.getMessage());
+			RegistrarError("Error al solicitar Ticket Ventanilla1: " + ObtenerFechaHora() + " " + e.getMessage() + "\n");
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "Error al solicitar Ticket Ventanilla2 " + e.getMessage());
+			RegistrarError("Error al solicitar Ticket Ventanilla2: " + ObtenerFechaHora() + " " + e.getMessage() + "\n");
+		}
+	}
+
+	protected void actionPerformedBtnSolicitarTicketCaja(ActionEvent arg0) {
+		try {
+			Socket socketSolicitarTicket = new Socket(ipPantalla, puertoPantalla);
+			
+			PaqueteDatos pd = new PaqueteDatos();
+			pd.setComando(11); // 11 CAJA
+			pd.setIp(ipCliente);
+			
+			ObjectOutputStream oos_llamar_nticket = new ObjectOutputStream(socketSolicitarTicket.getOutputStream());
+			oos_llamar_nticket.writeObject(pd);	
+			socketSolicitarTicket.close();
+			oos_llamar_nticket.close();
+			
+		} catch (UnknownHostException e) {
+			JOptionPane.showMessageDialog(null, "Error al solicitar Ticket Caja1 " + e.getMessage());
+			RegistrarError("Error al solicitar Ticket Caja1: " + ObtenerFechaHora() + " " + e.getMessage() + "\n");
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "Error al solicitar Ticket Caja2 " + e.getMessage());
+			RegistrarError("Error al solicitar Ticket Caja2: " + ObtenerFechaHora() + " " + e.getMessage() + "\n");
+		}	
+	}
+	
+	protected void actionPerformedBtnTurno(ActionEvent arg0) {
+		try {
+			Socket socketSolicitarTicket = new Socket(ipPantalla, puertoPantalla);
+			
+			PaqueteDatos pd = new PaqueteDatos();
+			pd.setComando(12); // 12 TURNO
+			pd.setIp(ipCliente);
+			
+			ObjectOutputStream oos_llamar_nticket = new ObjectOutputStream(socketSolicitarTicket.getOutputStream());
+			oos_llamar_nticket.writeObject(pd);
+			socketSolicitarTicket.close();
+			oos_llamar_nticket.close();
+		
+		} catch (UnknownHostException e) {
+			JOptionPane.showMessageDialog(null, "Error al solicitar Ticket Turno1 " + e.getMessage());
+			RegistrarError("Error al solicitar Ticket Turno1: " + ObtenerFechaHora() + " " + e.getMessage() + "\n");
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "Error al solicitar Ticket Turno2 " + e.getMessage());
+			RegistrarError("Error al solicitar Ticket Turno2: " + ObtenerFechaHora() + " " + e.getMessage() + "\n");
+		}	
+	}
+
+	public void ImprimirTicket(int nticket, int tipo){
+		try {
+			String tipoNombre = null;
+			
+			switch (tipo) {
+			case 1:
+				tipoNombre = "VE";
+				break;
+			case 2:
+				tipoNombre = "CA";
+				break;
+			case 3:
+				tipoNombre = "TU";
+				break;
+			default:
+				break;
+			}
+			
+			Map<String, Object> parameters = new HashMap();
+			parameters.put("prtNTicket", nticket);
+			parameters.put("prtTipo", tipoNombre);
+			try{
+				JasperPrint impressao = JasperFillManager.fillReport(getClass().getClassLoader().getResourceAsStream("rTicket.jasper"), parameters, new JREmptyDataSource());
+				JasperPrintManager.printReport(impressao, false);
+			}
+			catch (JRException ex){
+				JOptionPane.showMessageDialog(null, "Error iReport: " + ex.getMessage() );
+				RegistrarError("Error iReport: " + ObtenerFechaHora() + " " + ex.getMessage() + "\n");
+			}
+			
+			JOptionPane.showMessageDialog(null, "\nNRO ATENCIÓN:   " + tipoNombre + " - " + nticket + "\n\nSi no se imprimió su ticket, por favor llame a un encargado", "Información", JOptionPane.INFORMATION_MESSAGE);
+		
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Error al imprimir "+ e.getMessage());
+			RegistrarError("Error al imprimir: " + ObtenerFechaHora() + " " + e.getMessage() + "\n");
+		}	
+	}
+	
+	
+	int nro = -1;
 	
 	protected void actionPerformedBtnCerrar(ActionEvent arg0) {
 		nro = -1;
+		this.setEnabled(false);
 		numeros n = new numeros(this);
 		n.setVisible(true);
 		n.setAlwaysOnTop(true);	
 		n.setLocationRelativeTo(null);
-		/*
-		String pass = JOptionPane.showInputDialog(null, "Ingrese contraseña", null, JOptionPane.INFORMATION_MESSAGE);
-		if(pass.equals("grtc"))
-			System.exit(0);*/
 	}
 	
 	public void verificarPass(){
-		if(nro == 2244)
+		if(nro == 2244){
+			new Control().cerrarApp();
 			System.exit(0);
+			
+		}
 	}
 }

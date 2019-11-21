@@ -120,14 +120,14 @@ public class Reportes extends JFrame implements ActionListener {
 			int añoi = dchInicio.getCalendar().get(Calendar.YEAR);
 			int mesi = dchInicio.getCalendar().get(Calendar.MARCH) + 1;
 			int diai = dchInicio.getCalendar().get(Calendar.DAY_OF_MONTH);
-			//String fechai = añoi + "-" + mesi + "-" + diai + " 00:00:00";
-			String fechai = añoi + "-" + mesi + "-" + diai;
+			String fechai = añoi + "-" + mesi + "-" + diai + " 00:00:00";
+			//String fechai = añoi + "-" + mesi + "-" + diai;
 
 			int añof = dchFin.getCalendar().get(Calendar.YEAR);
 			int mesf = dchFin.getCalendar().get(Calendar.MARCH) + 1;
 			int diaf = dchFin.getCalendar().get(Calendar.DAY_OF_MONTH);
-			//String fechaf = añof + "-" + mesf + "-" + diaf + " 23:59:59";
-			String fechaf = añof + "-" + mesf + "-" + diaf;
+			String fechaf = añof + "-" + mesf + "-" + diaf + " 23:59:59";
+			//String fechaf = añof + "-" + mesf + "-" + diaf;
 			
 			Map parameters = new HashMap();
 			parameters.put("prtFechaI", fechai);
@@ -155,14 +155,14 @@ public class Reportes extends JFrame implements ActionListener {
 			int añoi = dchInicio.getCalendar().get(Calendar.YEAR);
 			int mesi = dchInicio.getCalendar().get(Calendar.MARCH) + 1;
 			int diai = dchInicio.getCalendar().get(Calendar.DAY_OF_MONTH);
-			//String fechai = añoi + "-" + mesi + "-" + diai + " 00:00:00";
-			String fechai = añoi + "-" + mesi + "-" + diai;
+			String fechai = añoi + "-" + mesi + "-" + diai + " 00:00:00";
+			//String fechai = añoi + "-" + mesi + "-" + diai;
 
 			int añof = dchFin.getCalendar().get(Calendar.YEAR);
 			int mesf = dchFin.getCalendar().get(Calendar.MARCH) + 1;
 			int diaf = dchFin.getCalendar().get(Calendar.DAY_OF_MONTH);
-			//String fechaf = añof + "-" + mesf + "-" + diaf + " 23:59:59";
-			String fechaf = añof + "-" + mesf + "-" + diaf;
+			String fechaf = añof + "-" + mesf + "-" + diaf + " 23:59:59";
+			//String fechaf = añof + "-" + mesf + "-" + diaf;
 			
 			Map parameters = new HashMap();
 			parameters.put("prtFechaI", fechai);

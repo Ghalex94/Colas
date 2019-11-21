@@ -1,50 +1,43 @@
 package gui_ventanas;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import clases.Control;
 import clases.PaqueteDatos;
 import javazoom.jl.player.Player;
 import mysql.Consultas;
-import net.sf.jasperreports.engine.JREmptyDataSource;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperPrintManager;
-import javax.swing.JTextArea;
-import java.awt.Frame;
-import java.awt.Image;
 import java.awt.Toolkit;
 import java.io.BufferedInputStream;
-import java.io.DataInputStream;
+import java.io.BufferedWriter;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URL;
+import java.net.URLConnection;
 import java.net.UnknownHostException;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.awt.Font;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import java.awt.SystemColor;
 import java.awt.Color;
 import javax.swing.JTextField;
-import javax.swing.JEditorPane;
-import javax.swing.JFileChooser;
 
 public class Pantalla extends JFrame implements Runnable {
 
@@ -53,7 +46,6 @@ public class Pantalla extends JFrame implements Runnable {
 	private JTextField txtCola2;
 	private JTextField txtCola3;
 	private JTextField txtCola4;
-	private JLabel lblNewLabel;
 	private JTextField txtCola5;
 	private JTextField txtCola6;
 	private JTextField txtCola7;
@@ -197,7 +189,7 @@ public class Pantalla extends JFrame implements Runnable {
 	}
 	
 	String ipPantalla = null;
-	String ipRecibida = null;;
+	String ipRecibida = null;
 	
 	int puertoPantalla = 9000;
 	int puertoCliente = 9001;
@@ -205,33 +197,35 @@ public class Pantalla extends JFrame implements Runnable {
 	
 	int ordenCuadros = 1;
 	
-	
-	
 	public void cargar(){
-		InetAddress address;
-		Consultas consultas = new Consultas();
-		consultas.iniciar();
-		try {
-			address = InetAddress.getLocalHost();
-			ipPantalla = address.getHostAddress();
-			//System.out.println("IP Local :"+address.getHostAddress());
-		} catch (UnknownHostException e) {
-			consultas.RegistrarError("Error al cargar ip " + e.getMessage());
-		}
-		
-		CargarAtenciones();
-		
-		Thread mihilo = new Thread(this);
-		mihilo.start();	
-		
-
-		try {
-			Runtime.getRuntime().exec("C:\\ReproductorVideo\\Video.exe", null);
-		} catch (IOException e) {
-			consultas.RegistrarError("Error al cargar el reproductor " + e.getMessage());
-		}
-		this.setAlwaysOnTop(true);	
-		consultas.reset();
+    	int confirma = ComprobarConexion();
+    	if(confirma == 0){
+    		JOptionPane.showMessageDialog(null, "Por favor verifique su conexión", "Alerta", JOptionPane.ERROR_MESSAGE);
+    		new Control().cerrarApp();
+    		System.exit(0);
+    	}
+    	else{
+    		InetAddress address;
+    		Consultas consultas = new Consultas();
+    		consultas.iniciar();
+    		try {
+    			address = InetAddress.getLocalHost();
+    			ipPantalla = address.getHostAddress();
+    		} catch (UnknownHostException e) {
+    			RegistrarError("Error al cargar IP: " + ObtenerFechaHora() + " " + e.getMessage() + "\n");
+    		}
+    		
+    		CargarAtenciones();
+    		Thread mihilo = new Thread(this);
+    		mihilo.start();
+    		try {
+    			Runtime.getRuntime().exec("C:\\ReproductorVideo\\Video.exe", null);
+    		} catch (IOException e) {
+    			RegistrarError("Error al cargar el reproductor: " + ObtenerFechaHora() + " " + e.getMessage() + "\n");
+    		}
+    		this.setAlwaysOnTop(true);	
+    		consultas.reset();
+    	}
 	}
 	
 	public void CargarAtenciones(){
@@ -245,21 +239,21 @@ public class Pantalla extends JFrame implements Runnable {
 				ImprimirMensajeEnPantalla(rs.getInt("turno"), rs.getInt("ventanilla"), rs.getInt("tipo"));
 			}
 		} catch (SQLException e) {
-			consulta.RegistrarError("Error al cargar Atenciones " + e.getMessage());
+			//RegistrarError("Error al cargar Atenciones " + e.getMessage() + "\n");
 		}
 		try {
 			rs.close();
 			consulta.reset();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			RegistrarError("Error al cerrar consulta: " + ObtenerFechaHora() + " " + e.getMessage() + "\n");
 		}
 	}
-
+	
 	@Override
 	public void run() {
 		Consultas consultas = new Consultas();
 		consultas.iniciar();
-			
+		int nventanilla = -1;
 		try {
 			ServerSocket serverPantalla = new ServerSocket(puertoPantalla);
 
@@ -327,7 +321,7 @@ public class Pantalla extends JFrame implements Runnable {
 				}
 				
 				if(comando == 0){ // VIENE DE VENTANILLA - Registrar
-					int nventanilla = pd_recibido.getVentanilla();
+					nventanilla = pd_recibido.getVentanilla();
 					int tipo = pd_recibido.getTipo();
 					RegistrarVentanilla(ipRecibida, tipo, nventanilla);
 				}
@@ -335,6 +329,7 @@ public class Pantalla extends JFrame implements Runnable {
 				if(comando == 1){ // VIENE DE VENTANILLA - SOLICITA NRO TICKET
 					int tipo = pd_recibido.getTipo();
 					int nticketprox = ObtenerTicketProximo(tipo);
+					
 					if(nticketprox != -1){
 						int ventanilla = pd_recibido.getVentanilla();
 						ActualizarEstadoTicket(nticketprox, 1, ventanilla, tipo); // 1 = ATENDIENDO
@@ -374,36 +369,82 @@ public class Pantalla extends JFrame implements Runnable {
 					ReproducirAlerta();
 				}
 				
+				ois_paquete_datos.close();
 				socketPantalla.close();
 			}
 			
 		} catch (IOException | ClassNotFoundException e) {
-			consultas.RegistrarError("Error al escuchar " + e.getMessage());
+			RegistrarError("Error en run, ventanilla: " + nventanilla + " - " + ObtenerFechaHora() + " " + e.getMessage() + "\n");
 		}
 		consultas.reset();
 	}
+	
+	public int ComprobarConexion(){
+		int confirma;
+        try {
+            URL ruta=new URL("http://www.google.com");
+            URLConnection rutaC=ruta.openConnection();
+            rutaC.connect();
+            confirma = 1;
+           }catch(Exception e){
+        	   confirma = 0;
+           }		
+		return confirma;
+	}
+	
+	public static String ObtenerFechaHora(){
+		Date date = new Date();
+		DateFormat hourdateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		String fechahora = hourdateFormat.format(date);
+		return fechahora;
+	}
+	
+	public static void RegistrarError(String errorMsj) {
+		File directorio=new File("C:\\LogErrores_SistemaColas"); 
+		directorio.mkdirs(); 
+		String nombreArchivo= "C:\\LogErrores_SistemaColas\\log.txt";
+		
+		BufferedWriter bw = null;
+	    FileWriter fw = null;
+        File file = new File(nombreArchivo);
+        try {
+	        if (!file.exists())
+				file.createNewFile();
+	        fw = new FileWriter(file.getAbsoluteFile(), true);
+	        bw = new BufferedWriter(fw);
+	        bw.write(errorMsj);
+        } catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "Error al registrar error1: " + ObtenerFechaHora() + " " + e.getMessage());
+		}
+        finally {
+            try {
+                if (bw != null)
+                    bw.close();
+                if (fw != null)
+                    fw.close();
+            } catch (IOException ex) {
+            	JOptionPane.showMessageDialog(null, "Error al registrar error2: " + ObtenerFechaHora() + " " + ex.getMessage());
+            }
+        }
+	}	
 	
 	public int ObtenerUltNroTicket(int tipo){
 		ResultSet rs = null;
 		Consultas consulta = new Consultas();
 		consulta.iniciar();
 		rs = consulta.ObtenerUltNroTicketHoy(tipo);
-		int ultnroticket = -1;
-		int newnroticket = 0;
+		int ultnroticket = 0;
 		try {
 			rs.next();
 			ultnroticket = rs.getInt("turno");
-			newnroticket = ultnroticket;
-		} catch (Exception e) {
-			consulta.RegistrarError("No existe ningun ticket registrado, este será el primero. Para ultnroTicket" + e.getMessage());
-		}
+		} catch (Exception e) {		}
+		
 		try {
 			rs.close();
 			consulta.reset();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return newnroticket;
+		} catch (SQLException e) {		}
+		
+		return ultnroticket;
 	}
 	
 	public int ObtenerTicketProximo(int tipo){
@@ -415,16 +456,12 @@ public class Pantalla extends JFrame implements Runnable {
 		try {
 			rs.next();
 			nticketprox = rs.getInt("turno");
-			//JOptionPane.showMessageDialog(null, "Ultimo ingresado: " + ultnroticket);
-		} catch (Exception e) {
-			consulta.RegistrarError("No existe ninguna ticket registrado, este será el primero. Para TicketProximo " + e.getMessage());
-		}
+		} catch (Exception e) {		}
 		try {
 			rs.close();
 			consulta.reset();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		} catch (SQLException e) {		}
+		
 		return nticketprox;
 	}
 	
@@ -608,7 +645,7 @@ public class Pantalla extends JFrame implements Runnable {
 			player.play();
 			
 		} catch (Exception e) {
-			consultas.RegistrarError("No se encontro el sonido " + e.getMessage());
+			RegistrarError("No se encontro el sonido: " + ObtenerFechaHora() + " " + e.getMessage() + "\n");
 		}
 		consultas.reset();
 	}
