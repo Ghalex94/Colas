@@ -19,8 +19,13 @@ import javax.swing.SwingConstants;
 import java.awt.Color;
 import java.awt.SystemColor;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
@@ -244,6 +249,8 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 	    			//JOptionPane.showMessageDialog(null, "Error al cargar ip " + e.getMessage());
 	    		}
 	    		
+	    		escribirEnArchivo("hola 2");
+	    		
 	    		Thread mihilo = new Thread(this);
 	    		mihilo.start();
         	}
@@ -278,12 +285,10 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
             confirma = 1;
            }catch(Exception e){
         	   confirma = 0;
-        }
-
-		
-		
+        }		
 		return confirma;
 	}
+	
 	
 	protected void keyTypedTxtNroVentanilla(KeyEvent e) {
 		char c = e.getKeyChar();
@@ -342,6 +347,125 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 			}
 		}
 	}
+	
+	private static final String nombreArchivo= "c:\\logJavaErrores\\log.txt";
+
+	public static void escribirEnArchivo(String textoMensaje) {
+		/*BufferedWriter bw = null;
+		FileWriter fw = null;
+		try {
+			fw = new FileWriter(nombreArchivo);
+			bw = new BufferedWriter(fw);
+			bw.write(textoMensaje);
+			System.out.println("Escrito con éxito");
+		} catch (IOException e) {
+			System.out.println("NO escrito.");
+			e.printStackTrace();
+		} finally {
+			try {
+				if (bw != null)
+					bw.close();
+				if (fw != null)
+					fw.close();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}*/
+		
+		/**
+		BufferedWriter bw;
+		File fichero = new File(nombreArchivo);
+
+        try
+        {
+	         if(!fichero.exists())
+	         {
+	        	 fichero.createNewFile();
+	        	 bw = new BufferedWriter(new FileWriter(fichero,true));
+	             bw.write(textoMensaje);
+	             bw.close();
+	         }
+	         else{
+	        	 BufferedReader br;
+                 br = new BufferedReader(new FileReader(fichero));
+
+                 String linea;
+
+                  Mientras el contenido del archivo sea diferente de null procedo a comprar  la linea a modificar con
+                 lo que hay dentro del archivo, si linea es igual a aCadena escribo el contenido de aCadena en mi nuevo
+                 fichero(Auxiliar) de lo contrario escribo el mismo contenido que ya tenia el antiguo fichero en mi fichero auxiliar
+
+                  
+                 while((linea=br.readLine()) != null)
+                 {
+                     if(linea.equals(aCadena))
+                     {
+                         Escribir(fNuevo,nCadena);
+
+                     }
+                     else
+                     {
+                         Escribir(fNuevo,linea);
+                     }
+                 }
+
+               // Cierro el buffer de lectura
+                 br.close();
+
+                 // Capturo el nombre del fichero antiguo
+                 String nAntiguo = fAntiguo.getName();
+                 // Borro el fichero antiguo
+                 borrar(fAntiguo);
+                 //Renombro el fichero auxiliar con el nombre del fichero antiguo
+                 fNuevo.renameTo(fAntiguo);
+                 
+	         }
+           
+
+        }catch(Exception e)
+        {
+            System.out.println(e);
+        }
+		**/
+		
+		BufferedWriter bw = null;
+	    FileWriter fw = null;
+		
+		String data = "\nHola stackoverflow.com...";
+        File file = new File(nombreArchivo);
+        // Si el archivo no existe, se crea!
+        try {
+	        if (!file.exists()) {
+	           
+					file.createNewFile();
+				
+	        }
+	        // flag true, indica adjuntar información al archivo.
+	        fw = new FileWriter(file.getAbsoluteFile(), true);
+	        bw = new BufferedWriter(fw);
+	        bw.write(data);
+	        System.out.println("información agregada!");
+			
+		
+        } catch (IOException e) {
+			e.printStackTrace();
+		}
+        finally {
+            try {
+                            //Cierra instancias de FileWriter y BufferedWriter
+                if (bw != null)
+                    bw.close();
+                if (fw != null)
+                    fw.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+		
+		
+		
+	}
+	
 	
 	protected void actionPerformedBtnRellamar(ActionEvent ex) {
 		
