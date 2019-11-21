@@ -241,8 +241,8 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 	}
 
 	
-	//String ipPantalla = "192.168.70.100";
-	String ipPantalla = "192.168.1.46";
+	String ipPantalla = "192.168.70.100";
+	//String ipPantalla = "192.168.1.46";
 	String ipVentanilla = null;
 	
 	int tipo = -1;
