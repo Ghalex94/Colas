@@ -248,7 +248,7 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 	
 	
 	String ipPantalla = "192.168.70.100";
-	//String ipPantalla = "192.168.1.46";
+	//String ipPantalla = "192.168.0.200";
 	String ipCliente = null;
 	
 	int puertoPantalla = 9000;
@@ -298,6 +298,7 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 				tipo = pd_recibido.getTipo();
 				
 				ImprimirTicket(nticket, tipo);
+				ois_recibir.close();
 				socket_recibir_nticket.close();
 			}
 		} catch (Exception e) {

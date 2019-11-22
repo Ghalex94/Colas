@@ -172,7 +172,7 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 		this.cbTipo.setFont(new Font("Tahoma", Font.BOLD, 15));
 		this.cbTipo.setBackground(SystemColor.control);
 		this.cbTipo.setBounds(233, 11, 210, 36);
-		this.cbTipo.setSelectedIndex(1);
+		this.cbTipo.setSelectedIndex(3);
 		this.panel.add(this.cbTipo);
 		
 		this.txtNroVentanilla = new JTextField();
@@ -313,6 +313,7 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 					txtNroAtencion.setText(""+ticket);
 					DesactivarLlamar();
 				}
+				dis_flujo_entrada.close();
 				socketVentanilla.close();
 			}
 		}
