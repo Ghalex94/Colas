@@ -53,6 +53,5 @@ B:\Desarrollo\Eclipse\GIT\Colas\resources\ReproductorVideo_Projecto\obj\Debug\Vi
 B:\Desarrollo\Eclipse\GIT\Colas\resources\ReproductorVideo_Projecto\obj\Debug\Video.Form1.resources
 B:\Desarrollo\Eclipse\GIT\Colas\resources\ReproductorVideo_Projecto\obj\Debug\Video.Properties.Resources.resources
 B:\Desarrollo\Eclipse\GIT\Colas\resources\ReproductorVideo_Projecto\obj\Debug\Video.csproj.GenerateResource.cache
-B:\Desarrollo\Eclipse\GIT\Colas\resources\ReproductorVideo_Projecto\obj\Debug\Video.csproj.CoreCompileInputs.cache
 B:\Desarrollo\Eclipse\GIT\Colas\resources\ReproductorVideo_Projecto\obj\Debug\Video.exe
 B:\Desarrollo\Eclipse\GIT\Colas\resources\ReproductorVideo_Projecto\obj\Debug\Video.pdb

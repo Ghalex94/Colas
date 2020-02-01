@@ -12,27 +12,25 @@ ventanilla	int,
 primary key (idcola,turno)
 );
 
-create table tb_errores(
-id	 		int primary key auto_increment,
-error		varchar(200),
-fecha		timestamp
-);
+insert into tb_colas values(null, 1, '2020-01-24', 1, 1, 5);
+insert into tb_colas values(null, 2, '2020-01-24', 1, 1, 4);
+insert into tb_colas values(null, 3, '2020-01-24', 1, 1, 3);
+insert into tb_colas values(null, 4, '2020-01-04', 1, 0, 10);
+insert into tb_colas values(null, 10, '2020-01-04', 1, 0, 13);
+insert into tb_colas values(null, 11, '2020-01-04', 1, 1, 6);
+insert into tb_colas values(null, 12, '2020-01-04', 1, 1, 7);
+insert into tb_colas values(null, 13, '2020-01-04', 1, 1, 5);
+insert into tb_colas values(null, 14, '2020-01-04', 1, 1, 8);
+insert into tb_colas values(null, 15, '2020-01-04', 1, 1, 16);
 
+insert into tb_colas values(null, 50, '2020-11-08', 1, 3, 10);
 
-insert into tb_colas values(null, 1, '2019-11-06', 1, 1, 5);
-insert into tb_colas values(null, 2, '2019-11-06', 1, 1, 4);
-insert into tb_colas values(null, 3, '2019-11-06', 1, 1, 3);
-insert into tb_colas values(null, 4, '2019-11-06', 1, 0, 10);
-insert into tb_colas values(null, 10, '2019-11-06', 1, 0, 13);
-
-insert into tb_colas values(null, 50, '2019-11-08', 1, 3, 10);
-
-insert into tb_colas values(null, 1, '2019-11-12', 1, 1, 15);
+insert into tb_colas values(null, 1, '2020-11-12', 1, 1, 15);
 
 
 
 
-SET SQL_SAFE_UPDATES = 0;
+SET SQL_SAFE_UPDATES = 0; -- desactivar modo seguro
  
 select turno from tb_colas order by turno desc LIMIT 1;
 
@@ -67,5 +65,12 @@ select * from tb_colas;
 
 show status like 'Threads%';
 
-drop database db_colas;
 
+select distinct ventanilla, case 	when estado = 2 then 'No atendidos'
+									when estado = 3 then 'Atendidos'
+									else null
+                                    end as Detalle, count(*), DATE_FORMAT(fecha, '%d-%m-%Y') as fecha from tb_colas
+where 
+fecha between   '2019-11-08'   and '2020-11-08'
+and (estado = 2 or estado = 3)
+group by ventanilla,estado

@@ -8,6 +8,8 @@ import clases.Control;
 import clases.PaqueteDatos;
 import javax.swing.JButton;
 import java.awt.Font;
+import java.awt.Image;
+
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -15,9 +17,11 @@ import javax.swing.SwingConstants;
 import java.awt.Color;
 import java.awt.SystemColor;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -35,10 +39,14 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
+
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import org.eclipse.wb.swing.FocusTraversalOnArray;
+import java.awt.Component;
 
 public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 
@@ -51,14 +59,26 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 	private JLabel lblA;
 	private JTextField txtNroVentanilla;
 	private JPanel panel;
-	private JComboBox cbTipo;
 	private JTextField txtTipoAtencion;
-	private JLabel lblNewLabel;
 	private JLabel lblsistemaDesarrolladoPor;
 	
-	/**
-	 * Launch the application.
-	 */
+
+	//VARIABLES LOCALES
+	
+	String ipServer = "192.168.0.100";
+	String ipVentanilla = null;
+	
+	int nroVentanilla = -1;
+	int tipoVentanilla = -1;
+	int limV = 0;
+	
+	int puertoServer = 9000;
+	int puertoVentanilla = 9002;
+	private JLabel lblLogo;
+	private JLabel lblSoyLaVentanilla;
+	
+	
+	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -82,10 +102,10 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 				windowClosingThis(arg0);
 			}
 		});
-		setTitle("Sistema de Colas");
+		setTitle("SISTEMA DE TURNOS - VENTANILLA");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 459, 421);
+		setBounds(100, 100, 459, 438);
 		this.contentPane = new JPanel();
 		this.contentPane.setBackground(SystemColor.controlHighlight);
 		this.contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -99,7 +119,7 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 			}
 		});
 		this.btnLlamarSiguiente.setForeground(Color.WHITE);
-		this.btnLlamarSiguiente.setBackground(new Color(70, 130, 180));
+		this.btnLlamarSiguiente.setBackground(new Color(0, 191, 255));
 		this.btnLlamarSiguiente.setFont(new Font("Tahoma", Font.BOLD, 15));
 		this.btnLlamarSiguiente.setBounds(10, 68, 210, 60);
 		this.contentPane.add(this.btnLlamarSiguiente);
@@ -111,110 +131,111 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 				actionPerformedBtnRellamar(e);
 			}
 		});
-		this.btnRellamar.setForeground(Color.DARK_GRAY);
-		this.btnRellamar.setBackground(new Color(240, 230, 140));
+		this.btnRellamar.setForeground(new Color(255, 255, 255));
+		this.btnRellamar.setBackground(new Color(30, 144, 255));
 		this.btnRellamar.setFont(new Font("Tahoma", Font.BOLD, 15));
 		this.btnRellamar.setBounds(233, 68, 210, 60);
 		this.contentPane.add(this.btnRellamar);
 		
-		this.btnMarcarAusente = new JButton("<html><center>Marcar ticket<br>como ausente</center></html>");
+		this.btnMarcarAusente = new JButton("<html><center>Marcar<br>como ausente</center></html>");
 		this.btnMarcarAusente.setEnabled(false);
 		this.btnMarcarAusente.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				actionPerformedBtnMarcarAusente(e);
 			}
 		});
-		this.btnMarcarAusente.setForeground(Color.WHITE);
+		this.btnMarcarAusente.setForeground(new Color(255, 255, 255));
 		this.btnMarcarAusente.setBackground(new Color(220, 20, 60));
 		this.btnMarcarAusente.setFont(new Font("Tahoma", Font.BOLD, 15));
 		this.btnMarcarAusente.setBounds(10, 139, 210, 60);
 		this.contentPane.add(this.btnMarcarAusente);
 		
-		this.btnMarcarAtendido = new JButton("<html><center>Marcar ticket<br>como atendido</center></html>");
+		this.btnMarcarAtendido = new JButton("<html><center>Marcar<br>como atendido</center></html>");
 		this.btnMarcarAtendido.setEnabled(false);
 		this.btnMarcarAtendido.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				actionPerformedBtnMarcarAtendido(e);
 			}
 		});
-		this.btnMarcarAtendido.setForeground(Color.WHITE);
+		this.btnMarcarAtendido.setForeground(new Color(255, 255, 255));
 		this.btnMarcarAtendido.setBackground(new Color(60, 179, 113));
 		this.btnMarcarAtendido.setFont(new Font("Tahoma", Font.BOLD, 15));
 		this.btnMarcarAtendido.setBounds(233, 139, 210, 60);
 		this.contentPane.add(this.btnMarcarAtendido);
 		
 		this.txtNroAtencion = new JTextField();
+		txtNroAtencion.setVisible(false);
 		this.txtNroAtencion.setForeground(new Color(220, 20, 60));
 		this.txtNroAtencion.setFont(new Font("Tahoma", Font.BOLD, 25));
 		this.txtNroAtencion.setHorizontalAlignment(SwingConstants.CENTER);
 		this.txtNroAtencion.setText("0");
 		this.txtNroAtencion.setEditable(false);
-		this.txtNroAtencion.setBounds(240, 269, 114, 84);
+		this.txtNroAtencion.setBounds(353, 238, 27, 48);
 		this.contentPane.add(this.txtNroAtencion);
 		this.txtNroAtencion.setColumns(10);
 		
-		this.lblA = new JLabel("TICKET EN ATENCI\u00D3N:");
+		this.lblA = new JLabel("TICKET ACTUAL:");
+		lblA.setForeground(new Color(220, 20, 60));
 		this.lblA.setHorizontalAlignment(SwingConstants.CENTER);
-		this.lblA.setFont(new Font("Tahoma", Font.BOLD, 15));
-		this.lblA.setBounds(99, 225, 247, 33);
+		this.lblA.setFont(new Font("Futura Md BT", Font.BOLD, 17));
+		this.lblA.setBounds(96, 210, 255, 28);
 		this.contentPane.add(this.lblA);
 		
 		this.panel = new JPanel();
-		this.panel.setBackground(Color.DARK_GRAY);
+		this.panel.setBackground(new Color(220, 20, 60));
 		this.panel.setBounds(0, 0, 453, 57);
 		this.contentPane.add(this.panel);
 		this.panel.setLayout(null);
 		
-		this.cbTipo = new JComboBox();
-		cbTipo.setEnabled(false);
-		cbTipo.setForeground(new Color(220, 20, 60));
-		this.cbTipo.setModel(new DefaultComboBoxModel(new String[] {"Seleccione un tipo", "VENTANILLA", "CAJA", "TURNO"}));
-		this.cbTipo.setFont(new Font("Tahoma", Font.BOLD, 15));
-		this.cbTipo.setBackground(SystemColor.control);
-		this.cbTipo.setBounds(233, 11, 210, 36);
-		this.cbTipo.setSelectedIndex(3);
-		this.panel.add(this.cbTipo);
-		
 		this.txtNroVentanilla = new JTextField();
-		this.txtNroVentanilla.setBounds(10, 12, 210, 35);
+		this.txtNroVentanilla.setBounds(230, 12, 213, 35);
 		this.panel.add(this.txtNroVentanilla);
 		this.txtNroVentanilla.setHorizontalAlignment(SwingConstants.CENTER);
-		this.txtNroVentanilla.setText("Ingrese su nro");
 		this.txtNroVentanilla.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
 				keyTypedTxtNroVentanilla(e);
 			}
 		});
-		this.txtNroVentanilla.setFont(new Font("Tahoma", Font.BOLD, 15));
-		this.txtNroVentanilla.setBackground(SystemColor.control);
+		this.txtNroVentanilla.setFont(new Font("Tahoma", Font.BOLD, 17));
+		this.txtNroVentanilla.setBackground(Color.WHITE);
 		this.txtNroVentanilla.setForeground(new Color(220, 20, 60));
 		this.txtNroVentanilla.setColumns(10);
 		
+		lblSoyLaVentanilla = new JLabel("Soy la ventanilla nro:");
+		lblSoyLaVentanilla.setHorizontalAlignment(SwingConstants.CENTER);
+		lblSoyLaVentanilla.setForeground(Color.WHITE);
+		lblSoyLaVentanilla.setFont(new Font("Futura Md BT", Font.BOLD, 18));
+		lblSoyLaVentanilla.setBounds(10, 12, 221, 35);
+		panel.add(lblSoyLaVentanilla);
+		
 		this.txtTipoAtencion = new JTextField();
+		txtTipoAtencion.setBackground(Color.WHITE);
 		this.txtTipoAtencion.setText("0");
 		this.txtTipoAtencion.setHorizontalAlignment(SwingConstants.CENTER);
 		this.txtTipoAtencion.setForeground(new Color(220, 20, 60));
-		this.txtTipoAtencion.setFont(new Font("Tahoma", Font.BOLD, 25));
+		this.txtTipoAtencion.setFont(new Font("Futura Md BT", Font.BOLD, 23));
 		this.txtTipoAtencion.setEditable(false);
 		this.txtTipoAtencion.setColumns(10);
-		this.txtTipoAtencion.setBounds(99, 269, 114, 84);
+		this.txtTipoAtencion.setBounds(96, 238, 255, 48);
 		this.contentPane.add(this.txtTipoAtencion);
-		
-		this.lblNewLabel = new JLabel("-");
-		this.lblNewLabel.setForeground(new Color(220, 20, 60));
-		this.lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 25));
-		this.lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		this.lblNewLabel.setBounds(214, 303, 27, 14);
-		this.contentPane.add(this.lblNewLabel);
 		
 		lblsistemaDesarrolladoPor = new JLabel("<html><center>Sistema desarrollado por BYTE X BYTE PER\u00DA E.I.R.L<br>Click para m\u00E1s informaci\u00F3n.</center></html>");
 		lblsistemaDesarrolladoPor.addMouseListener(this);
 		lblsistemaDesarrolladoPor.setHorizontalAlignment(SwingConstants.CENTER);
 		lblsistemaDesarrolladoPor.setForeground(SystemColor.controlShadow);
-		lblsistemaDesarrolladoPor.setFont(new Font("Tahoma", Font.ITALIC, 12));
-		lblsistemaDesarrolladoPor.setBounds(10, 364, 433, 28);
+		lblsistemaDesarrolladoPor.setFont(new Font("Futura Md BT", Font.ITALIC, 12));
+		lblsistemaDesarrolladoPor.setBounds(10, 362, 433, 47);
 		contentPane.add(lblsistemaDesarrolladoPor);
+		
+		lblLogo = new JLabel("");
+		lblLogo.setHorizontalAlignment(SwingConstants.CENTER);
+		Image img = new ImageIcon(this.getClass().getResource("/logoVentanilla.png")).getImage();
+		lblLogo.setIcon(new ImageIcon(img));
+		lblLogo.setBounds(175, 286, 100, 80);
+		contentPane.add(lblLogo);
+		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{txtNroVentanilla, btnLlamarSiguiente, btnRellamar, btnMarcarAusente, btnMarcarAtendido}));
+				
 		cargar();
 	}
 	
@@ -241,43 +262,86 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 	}
 
 	
-	String ipPantalla = "192.168.70.100";
-	//String ipPantalla = "192.168.1.46";
-	String ipVentanilla = null;
-	
-	int tipo = -1;
-	int nroVentanilla = -1;
-	
-	int puertoPantalla = 9000;
-	int puertoCliente = 9001;
-	int puertoVentanilla = 9002;
-	
 	public void cargar(){
     	this.setLocationRelativeTo(null);
     	
-        if( new Control().comprobar() ){
-        	int confirma = ComprobarConexion();
-        	if(confirma == 0){
-        		JOptionPane.showMessageDialog(null, "Por favor verifique su conexión", "Alerta", JOptionPane.ERROR_MESSAGE);
-        		new Control().cerrarApp();
+    	InetAddress address;
+		try {
+			address = InetAddress.getLocalHost();
+			ipVentanilla = address.getHostAddress();
+			
+			if(ipVentanilla.equals("127.0.0.1")){
+        		JOptionPane.showMessageDialog(null, "Compruebe su conexión en red");					
+				RegistrarError("\n" + ObtenerFechaHora() + " // Error de red al iniciar programa");
+				new Control().cerrarApp();
         		System.exit(0);
-        	}
-        	else{
-	    		InetAddress address;
-	    		try {
-	    			address = InetAddress.getLocalHost();
-	    			ipVentanilla = address.getHostAddress();
-	    		} catch (UnknownHostException e) {
-	    			RegistrarError("Error al cargar IP: " + ObtenerFechaHora() + " " + e.getMessage() + "\n");
-	    		}
-	    		Thread mihilo = new Thread(this);
-	    		mihilo.start();
-        	}
-        }        
-        else{
-        	new Control().cerrarApp();
-            System.exit(0);
-        }	
+			}
+			else {
+				try {
+					//PUERTO VENTANILLA
+					BufferedReader bfV = new BufferedReader(new FileReader("C:\\SistemaDeTurnos\\Configuraciones\\puertoVentanilla.txt"));
+					String sCadena = null;
+					while ((sCadena = bfV.readLine())!=null) {
+						puertoVentanilla = Integer.parseInt(sCadena);
+						//JOptionPane.showMessageDialog(null, puertoCliente);
+					}
+					
+					//PUERTO SERVER
+					BufferedReader bfPS = new BufferedReader(new FileReader("C:\\SistemaDeTurnos\\Configuraciones\\puertoServer.txt"));
+					sCadena = null;
+					while ((sCadena = bfPS.readLine())!=null) {
+						puertoServer = Integer.parseInt(sCadena);
+						//JOptionPane.showMessageDialog(null, puertoServer);
+					}
+					
+					//IP SERVER
+					BufferedReader bfIPS = new BufferedReader(new FileReader("C:\\SistemaDeTurnos\\Configuraciones\\ipServer.txt"));
+					sCadena = null;
+					while ((sCadena = bfIPS.readLine())!=null) {
+						ipServer = sCadena;
+						//JOptionPane.showMessageDialog(null, ipServer);
+					}
+
+					//LIMITE DE VENTANILLAS
+					BufferedReader bfLV = new BufferedReader(new FileReader("C:\\SistemaDeTurnos\\Configuraciones\\venLim.txt"));
+					sCadena = null;
+					while ((sCadena = bfLV.readLine())!=null) {
+						limV = Integer.parseInt(sCadena);
+						//JOptionPane.showMessageDialog(null, ipServer);
+					}
+
+					//TIPO DE VENTANILLA
+					BufferedReader bfTV = new BufferedReader(new FileReader("C:\\SistemaDeTurnos\\Configuraciones\\ventTipo.txt"));
+					sCadena = null;
+					while ((sCadena = bfTV.readLine())!=null) {
+						tipoVentanilla = Integer.parseInt(sCadena);
+						//JOptionPane.showMessageDialog(null, ipServer);
+					}
+					switch (tipoVentanilla) {
+					case 1:
+						this.setTitle("SISTEMA DE TURNOS - VENTANILLA");
+						break;
+					case 2:
+						this.setTitle("SISTEMA DE TURNOS - CAJA");
+						break;
+					case 3:
+						this.setTitle("SISTEMA DE TURNOS - TURNOS");
+						break;
+
+					default:
+						break;
+					}
+								
+				} catch (IOException e1) {
+					JOptionPane.showMessageDialog(null, "No se encontró archivos de configuración en el sistema.\nComuníquese con el desarrollador");
+				}
+				
+				Thread mihilo = new Thread(this);
+				mihilo.start();
+			}
+		} catch (UnknownHostException e) {
+			RegistrarError("\n" + ObtenerFechaHora() + " // Error al cargar IP: " + e.getMessage());
+		}
 	}
 	
 	@Override
@@ -285,40 +349,58 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 		try {
 			ServerSocket serverVentanilla = new ServerSocket(puertoVentanilla);
 			Socket socketVentanilla;
-			
-			while(true){
-				socketVentanilla = serverVentanilla.accept();
-				DataInputStream dis_flujo_entrada = new DataInputStream(socketVentanilla.getInputStream());
-				int ticket = dis_flujo_entrada.readInt();
-				
-				if(ticket == -1){
-					txtTipoAtencion.setText("COLA");
-					txtNroAtencion.setText("VACÍA");
-				}
-				else{
-					switch (cbTipo.getSelectedIndex()) {
-					case 1:
-						txtTipoAtencion.setText("VE");
-						break;
-					case 2:
-						txtTipoAtencion.setText("CA");
-						break;
-					case 3:
-						txtTipoAtencion.setText("TU");
-						break;
-					default:
-						break;
-					}
+			try {
+				while(true){
+					socketVentanilla = serverVentanilla.accept();
+					DataInputStream dis_flujo_entrada = new DataInputStream(socketVentanilla.getInputStream());
+					int nticketprox = dis_flujo_entrada.readInt();
 					
-					txtNroAtencion.setText(""+ticket);
-					DesactivarLlamar();
+					if(nticketprox == -1){
+						txtTipoAtencion.setText("COLA VACÍA");
+						txtNroAtencion.setText("VACÍA");
+					}
+					else{
+						switch (tipoVentanilla) {
+						case 1: // VENTANILLLA
+							if(nticketprox < 10)
+								txtTipoAtencion.setText("VE00"+nticketprox);
+							if(nticketprox >= 10 && nticketprox < 100)
+								txtTipoAtencion.setText("VE0"+nticketprox);
+							if(nticketprox >= 100)
+								txtTipoAtencion.setText("VE"+nticketprox);
+							break;
+						case 2: // CAJA
+							if(nticketprox < 10)
+								txtTipoAtencion.setText("CA00"+nticketprox);
+							if(nticketprox >= 10 && nticketprox < 100)
+								txtTipoAtencion.setText("CA0"+nticketprox);
+							if(nticketprox >= 100)
+								txtTipoAtencion.setText("CA"+nticketprox);
+							break;
+						case 3: // TURNO
+							if(nticketprox < 10)
+								txtTipoAtencion.setText("TU00"+nticketprox);
+							if(nticketprox >= 10 && nticketprox < 100)
+								txtTipoAtencion.setText("TU0"+nticketprox);
+							if(nticketprox >= 100)
+								txtTipoAtencion.setText("TU"+nticketprox);
+							break;
+						default:
+							break;
+						}
+						txtNroAtencion.setText(""+nticketprox);
+						DesactivarLlamar();
+					}
+					socketVentanilla.close();
 				}
-				dis_flujo_entrada.close();
-				socketVentanilla.close();
+			} catch (Exception e) {
+				serverVentanilla.close();
+				RegistrarError("\n" + ObtenerFechaHora() + " //Error en run con serverVentanilla: " + e.getMessage());
 			}
+			
 		}
 		catch (Exception e) {
-			RegistrarError("Error en run: " + ObtenerFechaHora() + " " + e.getMessage() + "\n");
+			RegistrarError("\n" + ObtenerFechaHora() + " // Error en run: " + e.getMessage());
 		}
 	}
 	
@@ -343,9 +425,9 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 	}
 	
 	public static void RegistrarError(String errorMsj) {
-		File directorio=new File("C:\\LogErrores_SistemaColas"); 
+		File directorio=new File("C:\\SistemaDeTurnos\\Logs"); 
 		directorio.mkdirs(); 
-		String nombreArchivo= "C:\\LogErrores_SistemaColas\\log.txt";
+		String nombreArchivo= "C:\\SistemaDeTurnos\\Logs\\log.txt";
 		
 		BufferedWriter bw = null;
 	    FileWriter fw = null;
@@ -366,7 +448,7 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
                 if (fw != null)
                     fw.close();
             } catch (IOException ex) {
-            	JOptionPane.showMessageDialog(null, "Error al registrar error2: " + ObtenerFechaHora() + " " + ex.getMessage());
+            	JOptionPane.showMessageDialog(null, "Error al cerrar errores: " + ObtenerFechaHora() + " " + ex.getMessage());
             }
         }
 	}
@@ -392,29 +474,28 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 		if(txtNroVentanilla.getText().equals("Ingrese su nro"))
 			txtNroVentanilla.setText(null);
 	}
-
 	
 	protected void actionPerformedBtnLlamarSiguiente(ActionEvent ex) {
-		if(txtNroVentanilla.getText().equals("Ingrese su nro"))
+		if(txtNroVentanilla.getText().equals("")){
 			JOptionPane.showMessageDialog(null, "Por favor, ingrese su número de ventanilla.", "Alerta", JOptionPane.ERROR_MESSAGE);
-		if(cbTipo.getSelectedIndex() == 0)
-			JOptionPane.showMessageDialog(null, "Por favor, indique el tipo de ventanilla", "Alerta", JOptionPane.ERROR_MESSAGE);
+			txtNroVentanilla.requestFocus();
+		}
+		/*if(cbTipo.getSelectedIndex() == 0)
+			JOptionPane.showMessageDialog(null, "Por favor, indique el tipo de ventanilla", "Alerta", JOptionPane.ERROR_MESSAGE);*/
 		else{
 			nroVentanilla = Integer.parseInt(txtNroVentanilla.getText());
-			if(nroVentanilla < 0 || nroVentanilla > 30)
-				JOptionPane.showMessageDialog(null, "No tiene permiso para usar mas de 30", "Alerta", JOptionPane.ERROR_MESSAGE);
+			if(nroVentanilla < 0 || nroVentanilla > limV)
+				JOptionPane.showMessageDialog(null, "No tiene permitido usar mas de " + limV, "Alerta", JOptionPane.ERROR_MESSAGE);
 			else{
-				tipo = cbTipo.getSelectedIndex();
-				nroVentanilla = Integer.parseInt(txtNroVentanilla.getText());
-				
+				nroVentanilla = Integer.parseInt(txtNroVentanilla.getText());				
 				try {
-					Socket socketSolicitarTicket = new Socket(ipPantalla, puertoPantalla);			
+					Socket socketSolicitarTicket = new Socket(ipServer, puertoServer);			
 					
 					PaqueteDatos pd = new PaqueteDatos();
 					pd.setComando(1); // ATENDIENDO
 					pd.setIp(ipVentanilla);
 					pd.setVentanilla(Integer.parseInt(txtNroVentanilla.getText()));
-					pd.setTipo(tipo);
+					pd.setTipo(tipoVentanilla);
 					
 					ObjectOutputStream oos_llamar_nticket = new ObjectOutputStream(socketSolicitarTicket.getOutputStream());
 					oos_llamar_nticket.writeObject(pd);		
@@ -422,34 +503,30 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 					socketSolicitarTicket.close();
 					oos_llamar_nticket.close();
 					
-				} catch (UnknownHostException e) {
-					JOptionPane.showMessageDialog(null, "Error al llamar al Siguiente Ticket1 " + e.getMessage());
-					RegistrarError("Error al llamar al siguiente ticket1: " + ObtenerFechaHora() + " " + e.getMessage() + "\n");
-				} catch (IOException e) {
-					JOptionPane.showMessageDialog(null, "Error al llamar al Siguiente Ticket2 " + e.getMessage());
-					RegistrarError("Error al llamar al siguiente ticket2: " + ObtenerFechaHora() + " " + e.getMessage() + "\n");
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null, "Error al llamar al Siguiente Ticket: " + e.getMessage());
+	    			RegistrarError("\n" + ObtenerFechaHora() + " // Error al llamar al Siguiente Ticket: " + e.getMessage());
 				}
 			}
 		}
 	}
 	
 	protected void actionPerformedBtnRellamar(ActionEvent ex) {
-		if(cbTipo.getSelectedIndex() == 0 || txtNroVentanilla.getText().equals("Ingrese nro"))
+		if(txtNroVentanilla.getText().equals("Ingrese nro"))
 			JOptionPane.showMessageDialog(null, "Seleccione los datos correctamente", "Alerta", JOptionPane.ERROR_MESSAGE);
 		else{
-			tipo = cbTipo.getSelectedIndex();
 			nroVentanilla = Integer.parseInt(txtNroVentanilla.getText());
 			int ticketactual = Integer.parseInt(txtNroAtencion.getText());
 			
 			try {
-				Socket socketActualizarTicket = new Socket(ipPantalla, puertoPantalla);
+				Socket socketActualizarTicket = new Socket(ipServer, puertoServer);
 				
 				PaqueteDatos pd = new PaqueteDatos();
 				pd.setComando(4); // RELLAMAR
 				pd.setIp(ipVentanilla);
 				pd.setTicket(ticketactual);
 				pd.setVentanilla(Integer.parseInt(txtNroVentanilla.getText()));
-				pd.setTipo(tipo);
+				pd.setTipo(tipoVentanilla);
 				
 				ObjectOutputStream oos_indicar_ausente = new ObjectOutputStream(socketActualizarTicket.getOutputStream());
 				oos_indicar_ausente.writeObject(pd);	 
@@ -457,33 +534,29 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 				socketActualizarTicket.close();
 				oos_indicar_ausente.close();
 				
-			} catch (UnknownHostException e) {
-				JOptionPane.showMessageDialog(null, "Error al Rellamar1 " + e.getMessage());
-				RegistrarError("Error al llamar al Rellamar1: " + ObtenerFechaHora() + " " + e.getMessage() + "\n");
-			} catch (IOException e) {
-				JOptionPane.showMessageDialog(null, "Error al Rellamar2 " + e.getMessage());
-				RegistrarError("Error al llamar al Rellamar2: " + ObtenerFechaHora() + " " + e.getMessage() + "\n");
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null, "Error al Rellamar: " + e.getMessage());
+    			RegistrarError("\n" + ObtenerFechaHora() + " // Error al Rellamar: " + e.getMessage());
 			}
 		}
 	}
 	
 	protected void actionPerformedBtnMarcarAusente(ActionEvent ex) {
-		if(cbTipo.getSelectedIndex() == 0 || txtNroVentanilla.getText().equals("Ingrese nro"))
+		if(txtNroVentanilla.getText().equals("Ingrese nro"))
 			JOptionPane.showMessageDialog(null, "Seleccione los datos correctamente", "Alerta", JOptionPane.ERROR_MESSAGE);
 		else{
-			tipo = cbTipo.getSelectedIndex();
 			nroVentanilla = Integer.parseInt(txtNroVentanilla.getText());
 			int ticketactual = Integer.parseInt(txtNroAtencion.getText());
 			
 			try {
-				Socket socketActualizarTicket = new Socket(ipPantalla, puertoPantalla);
+				Socket socketActualizarTicket = new Socket(ipServer, puertoServer);
 				
 				PaqueteDatos pd = new PaqueteDatos();
 				pd.setComando(2); // AUSENTE
 				pd.setIp(ipVentanilla);
 				pd.setTicket(ticketactual);
 				pd.setVentanilla(Integer.parseInt(txtNroVentanilla.getText()));
-				pd.setTipo(tipo);
+				pd.setTipo(tipoVentanilla);
 				
 				ObjectOutputStream oos_indicar_ausente = new ObjectOutputStream(socketActualizarTicket.getOutputStream());
 				oos_indicar_ausente.writeObject(pd);		 
@@ -493,33 +566,29 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 				ActivarLlamar();
 				txtTipoAtencion.setText("");
 				txtNroAtencion.setText("");
-			} catch (UnknownHostException e) {
-				JOptionPane.showMessageDialog(null, "Error al marcar como ausente1 " + e.getMessage());
-				RegistrarError("Error al al marcar como ausente1: " + ObtenerFechaHora() + " " + e.getMessage() + "\n");
-			} catch (IOException e) {
-				JOptionPane.showMessageDialog(null, "Error al marcar como ausente2 " + e.getMessage());
-				RegistrarError("Error al marcar como ausente2: " + ObtenerFechaHora() + " " + e.getMessage() + "\n");
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null, "Error al marcar como ausente: " + e.getMessage());
+    			RegistrarError("\n" + ObtenerFechaHora() + " // Error al al marcar como ausente: " + e.getMessage());
 			}
 		}
 	}
 	
 	protected void actionPerformedBtnMarcarAtendido(ActionEvent ex) {
-		if(cbTipo.getSelectedIndex() == 0 || txtNroVentanilla.getText().equals("Ingrese nro"))
+		if(txtNroVentanilla.getText().equals("Ingrese nro"))
 			JOptionPane.showMessageDialog(null, "Seleccione los datos correctamente", "Alerta", JOptionPane.ERROR_MESSAGE);
 		else{
-			tipo = cbTipo.getSelectedIndex();
 			nroVentanilla = Integer.parseInt(txtNroVentanilla.getText());
 			int ticketactual = Integer.parseInt(txtNroAtencion.getText());
 			
 			try {
-				Socket socketActualizarTicket = new Socket(ipPantalla, puertoPantalla);
+				Socket socketActualizarTicket = new Socket(ipServer, puertoServer);
 				
 				PaqueteDatos pd = new PaqueteDatos();
 				pd.setComando(3); // ATENDIDO
 				pd.setIp(ipVentanilla);
 				pd.setTicket(ticketactual);
 				pd.setVentanilla(Integer.parseInt(txtNroVentanilla.getText()));
-				pd.setTipo(tipo);
+				pd.setTipo(tipoVentanilla);
 				
 				ObjectOutputStream oos_indicar_atendido = new ObjectOutputStream(socketActualizarTicket.getOutputStream());
 				oos_indicar_atendido.writeObject(pd);		 
@@ -530,12 +599,9 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 				txtTipoAtencion.setText("");
 				txtNroAtencion.setText("");
 				
-			} catch (UnknownHostException e) {
+			} catch (Exception e) {
 				JOptionPane.showMessageDialog(null, "Error al marcar como atendido1 " + e.getMessage());
-				RegistrarError("Error al marcar como atendido1: " + ObtenerFechaHora() + " " + e.getMessage() + "\n");
-			} catch (IOException e) {
-				JOptionPane.showMessageDialog(null, "Error al marcar como atendido2 " + e.getMessage());
-				RegistrarError("Error al marcar como atendido2: " + ObtenerFechaHora() + " " + e.getMessage() + "\n");
+    			RegistrarError("\n" + ObtenerFechaHora() + " // Error al marcar como atendido: " + e.getMessage());
 			}
 		}
 	}

@@ -58,10 +58,10 @@ public class numeros extends JFrame {
 	 * Create the frame.
 	 */
 	public numeros(Cliente temp) {
+		c = temp;
+
 		setUndecorated(true);
 		setType(Type.POPUP);
-		c= temp;
-		
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 295, 392);
@@ -306,7 +306,7 @@ public class numeros extends JFrame {
 	}
 	protected void actionPerformedBtnOn(ActionEvent e) {
 		try {
-			c.nro = Integer.parseInt(txtNumero.getText());
+			c.pass = Integer.parseInt(txtNumero.getText());
 			c.verificarPass();
 		} catch (Exception e2) {
 		}

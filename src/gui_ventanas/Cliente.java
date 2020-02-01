@@ -7,7 +7,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
 import clases.Control;
 import clases.PaqueteDatos;
 import net.sf.jasperreports.engine.JREmptyDataSource;
@@ -22,8 +21,11 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -64,9 +66,18 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 	private JLabel lblsistemaDesarrolladoPor;
 	private JButton btnCerrar;
 	
-	/**
-	 * Launch the application.
-	 */
+	
+	//VARIABLES LOCALES
+	
+	String ipServer = "192.168.70.100";
+	String ipCliente = null;
+	
+	int puertoServer = 9000;
+	int puertoCliente = 9001;
+	
+	int modo_imp = 0; // 0=PANTALLA 1=TICKET
+	public int pass = -1;
+	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -111,15 +122,15 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 		
 		lblLogo = new JLabel("");
 		lblLogo.setHorizontalAlignment(SwingConstants.CENTER);
-		Image img = new ImageIcon(this.getClass().getResource("/logo.png")).getImage();
+		Image img = new ImageIcon(this.getClass().getResource("/logoCliente.png")).getImage();
 		lblLogo.setIcon(new ImageIcon(img));
-		lblLogo.setBounds(25, 10, 284, 177);
+		lblLogo.setBounds(25, 10, 300, 177);
 		contentPane.add(lblLogo);
 		
 		int informacioX = altoventana/2 - altoboton;
 		this.lblInformacion = new JLabel("Presione un bot\u00F3n para obtener ticket de atenci\u00F3n.");
 		this.lblInformacion.setForeground(new Color(30, 144, 255));
-		this.lblInformacion.setFont(new Font("Tahoma", Font.PLAIN, 30));
+		this.lblInformacion.setFont(new Font("Futura Md BT", Font.PLAIN, 30));
 		this.lblInformacion.setHorizontalAlignment(SwingConstants.CENTER);
 		this.lblInformacion.setBounds(-5, 206, anchoventana, 109);
 		this.contentPane.add(this.lblInformacion);
@@ -137,12 +148,12 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 		btnCerrar.setBounds(964, 11, 55, 23);
 		panelTitulo.add(btnCerrar);
 		
-		this.lblTitulo = new JLabel("<html><center>GERENCIA REGIONAL DE TRANSPORTES <br>Y COMUNICACIONES - AREQUIPA</center></html>");
+		this.lblTitulo = new JLabel("<html><center>GERENCIA REGIONAL DE<br>TRANSPORTES Y COMUNICACIONES </center></html>");
 		lblTitulo.setBounds(336, 59, 672, 74);
 		panelTitulo.add(lblTitulo);
 		this.lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
 		this.lblTitulo.setForeground(Color.WHITE);
-		this.lblTitulo.setFont(new Font("Tahoma", Font.BOLD, 30));
+		this.lblTitulo.setFont(new Font("Futura Md BT", Font.BOLD, 30));
 		
 		
 		int xbotonV = (anchoventana/2) - (anchoboton/2);
@@ -155,8 +166,8 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 		});
 		this.btnSolicitarTicketVentanilla.setForeground(new Color(255, 255, 255));
 		this.btnSolicitarTicketVentanilla.setBackground(new Color(30, 144, 255));
-		this.btnSolicitarTicketVentanilla.setFont(new Font("Tahoma", Font.BOLD, 40));
-		this.btnSolicitarTicketVentanilla.setBounds(257, 583, 500, 100);
+		this.btnSolicitarTicketVentanilla.setFont(new Font("Futura Md BT", Font.BOLD, 40));
+		this.btnSolicitarTicketVentanilla.setBounds(256, 309, 500, 100);
 		this.contentPane.add(this.btnSolicitarTicketVentanilla);
 		
 
@@ -169,7 +180,7 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 			}
 		});
 		this.btnSolicitarTicketCaja.setForeground(new Color(255, 255, 255));
-		this.btnSolicitarTicketCaja.setFont(new Font("Tahoma", Font.BOLD, 40));
+		this.btnSolicitarTicketCaja.setFont(new Font("Futura Md BT", Font.BOLD, 40));
 		this.btnSolicitarTicketCaja.setBackground(new Color(30, 144, 255));
 		this.btnSolicitarTicketCaja.setBounds(256, 444, 500, 100);
 		this.contentPane.add(this.btnSolicitarTicketCaja);
@@ -186,17 +197,17 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 			}
 		});
 		this.btnTurno.setForeground(Color.WHITE);
-		this.btnTurno.setFont(new Font("Tahoma", Font.BOLD, 40));
+		this.btnTurno.setFont(new Font("Futura Md BT", Font.BOLD, 40));
 		this.btnTurno.setBackground(new Color(30, 144, 255));
-		this.btnTurno.setBounds(257, 309, 500, 100);
+		this.btnTurno.setBounds(257, 583, 500, 100);
 		this.contentPane.add(this.btnTurno);
 		
 		lblsistemaDesarrolladoPor = new JLabel("<html><center>Sistema desarrollado por BYTE X BYTE PER\u00DA E.I.R.L<br>Toque para m\u00E1s informaci\u00F3n.</center></html>");
 		lblsistemaDesarrolladoPor.addMouseListener(this);
 		lblsistemaDesarrolladoPor.setHorizontalAlignment(SwingConstants.CENTER);
 		lblsistemaDesarrolladoPor.setForeground(SystemColor.controlShadow);
-		lblsistemaDesarrolladoPor.setFont(new Font("Tahoma", Font.ITALIC, 12));
-		lblsistemaDesarrolladoPor.setBounds(208, 717, 597, 30);
+		lblsistemaDesarrolladoPor.setFont(new Font("Futura Md BT", Font.ITALIC, 14));
+		lblsistemaDesarrolladoPor.setBounds(208, 705, 597, 52);
 		contentPane.add(lblsistemaDesarrolladoPor);
 		
 		cargar();
@@ -246,17 +257,8 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 		 new Control().cerrarApp();
 	}
 	
-	
-	String ipPantalla = "192.168.70.100";
-	//String ipPantalla = "192.168.0.200";
-	String ipCliente = null;
-	
-	int puertoPantalla = 9000;
-	int puertoCliente = 9001;
-	int puertoVentanilla = 9002;
-	
 	private void cargar(){
-        if( new Control().comprobar() ){
+        /*if( new Control().comprobar() ){
         	int confirma = ComprobarConexion();
         	if(confirma == 0){
         		JOptionPane.showMessageDialog(null, "Por favor verifique su conexión", "Alerta", JOptionPane.ERROR_MESSAGE);
@@ -269,7 +271,7 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 					address = InetAddress.getLocalHost();
 					ipCliente = address.getHostAddress();
 				} catch (UnknownHostException e) {
-					RegistrarError("Error al cargar IP: " + ObtenerFechaHora() + " " + e.getMessage() + "\n");
+					RegistrarError("\n" + ObtenerFechaHora() + " // Error al cargar IP: " + e.getMessage());
 				}
 				Thread mihilo = new Thread(this);
 				mihilo.start();
@@ -278,38 +280,96 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
         else{
         	new Control().cerrarApp();
             System.exit(0);
-        }
+        }*/
+			InetAddress address;
+			try {
+				address = InetAddress.getLocalHost();
+				ipCliente = address.getHostAddress();
+				
+				if(ipCliente.equals("127.0.0.1")){
+	        		JOptionPane.showMessageDialog(null, "Compruebe su conexión en red");					
+					RegistrarError("\n" + ObtenerFechaHora() + " // Error de red al iniciar programa");
+					new Control().cerrarApp();
+	        		System.exit(0);
+				}
+				else {
+					try {
+						//PUERTO CLIENTE
+						BufferedReader bfPC = new BufferedReader(new FileReader("C:\\SistemaDeTurnos\\Configuraciones\\puertoCliente.txt"));
+						String sCadena = null;
+						while ((sCadena = bfPC.readLine())!=null) {
+							puertoCliente = Integer.parseInt(sCadena);
+							//JOptionPane.showMessageDialog(null, puertoCliente);
+						}
+						
+						//PUERTO SERVER
+						BufferedReader bfPS = new BufferedReader(new FileReader("C:\\SistemaDeTurnos\\Configuraciones\\puertoServer.txt"));
+						sCadena = null;
+						while ((sCadena = bfPS.readLine())!=null) {
+							puertoServer = Integer.parseInt(sCadena);
+							//JOptionPane.showMessageDialog(null, puertoServer);
+						}
+						
+						//IP SERVER			
+						BufferedReader bfIPS = new BufferedReader(new FileReader("C:\\SistemaDeTurnos\\Configuraciones\\ipServer.txt"));
+						sCadena = null;
+						while ((sCadena = bfIPS.readLine())!=null) {
+							ipServer = sCadena;
+							//JOptionPane.showMessageDialog(null, ipServer);
+						}
+						
+						//IP SERVER			
+						BufferedReader bfIM = new BufferedReader(new FileReader("C:\\SistemaDeTurnos\\Configuraciones\\impModo.txt"));
+						sCadena = null;
+						while ((sCadena = bfIM.readLine())!=null) {
+							modo_imp = Integer.parseInt(sCadena);
+							//JOptionPane.showMessageDialog(null, ipServer);
+						}		
+					} catch (IOException e1) {
+						JOptionPane.showMessageDialog(null, "No se encontró archivos de configuración en el sistema.\nComuníquese con el desarrollador");
+					}
+					Thread mihilo = new Thread(this);
+					mihilo.start();
+				}
+			} catch (UnknownHostException e) {
+				RegistrarError("\n" + ObtenerFechaHora() + " // Error al cargar IP: " + e.getMessage());
+			}
 	}
 	
 	@Override
-	public void run() {
+	public void run() {		
 		try{
 			ServerSocket server_Cliente = new ServerSocket(puertoCliente);
 			Socket socket_recibir_nticket;
-			int nticket;
-			int tipo;
-			while(true){
-				socket_recibir_nticket = server_Cliente.accept();
-				PaqueteDatos pd_recibido = new PaqueteDatos();
-				ObjectInputStream ois_recibir = new ObjectInputStream(socket_recibir_nticket.getInputStream());
-				pd_recibido = (PaqueteDatos) ois_recibir.readObject();
-				
-				nticket = pd_recibido.getTicket();
-				tipo = pd_recibido.getTipo();
-				
-				ImprimirTicket(nticket, tipo);
-				ois_recibir.close();
-				socket_recibir_nticket.close();
+			try {
+				int nticket;
+				int tipo;
+				while(true){
+					socket_recibir_nticket = server_Cliente.accept();
+					PaqueteDatos pd_recibido = new PaqueteDatos();
+					ObjectInputStream ois_recibir = new ObjectInputStream(socket_recibir_nticket.getInputStream());
+					pd_recibido = (PaqueteDatos) ois_recibir.readObject();
+					
+					nticket = pd_recibido.getTicket();
+					tipo = pd_recibido.getTipo();
+					
+					ImprimirTicket(nticket, tipo);
+					socket_recibir_nticket.close();
+				}
+			} catch (IOException e) {
+				server_Cliente.close();
+				RegistrarError("\n" + ObtenerFechaHora() + " //Error en run con serverCliente: " + e.getMessage());
 			}
+			
 		} catch (Exception e) {
-			RegistrarError("Error en run: " + ObtenerFechaHora() + " " + e.getMessage() + "\n");
+			RegistrarError("\n" + ObtenerFechaHora() + " // Error en run: " + e.getMessage());
 		}
 	}
 	
 	public int ComprobarConexion(){
 		int confirma;
         try {
-            URL ruta=new URL("http://www.google.com");
+            URL ruta=new URL("www.google.com");
             URLConnection rutaC=ruta.openConnection();
             rutaC.connect();
             confirma = 1;
@@ -327,9 +387,9 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 	}
 	
 	public static void RegistrarError(String errorMsj) {
-		File directorio=new File("C:\\LogErrores_SistemaColas"); 
+		File directorio=new File("C:\\SistemaDeTurnos\\Logs"); 
 		directorio.mkdirs(); 
-		String nombreArchivo= "C:\\LogErrores_SistemaColas\\log.txt";
+		String nombreArchivo= "C:\\SistemaDeTurnos\\Logs\\log.txt";
 		
 		BufferedWriter bw = null;
 	    FileWriter fw = null;
@@ -350,14 +410,14 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
                 if (fw != null)
                     fw.close();
             } catch (IOException ex) {
-            	JOptionPane.showMessageDialog(null, "Error al registrar error2: " + ObtenerFechaHora() + " " + ex.getMessage());
+            	JOptionPane.showMessageDialog(null, "Error al cerrar errores: " + ObtenerFechaHora() + " " + ex.getMessage());
             }
         }
 	}	
 
 	protected void actionPerformedBtnSolicitarTicket(ActionEvent arg0) {
 		try {
-			Socket socketSolicitarTicket = new Socket(ipPantalla, puertoPantalla);
+			Socket socketSolicitarTicket = new Socket(ipServer, puertoServer);
 			
 			PaqueteDatos pd = new PaqueteDatos();
 			pd.setComando(10); // 10 VENTANILLA
@@ -368,18 +428,15 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 			socketSolicitarTicket.close();
 			oos_llamar_nticket.close();
 			
-		} catch (UnknownHostException e) {
-			JOptionPane.showMessageDialog(null, "Error al solicitar Ticket Ventanilla1 " + e.getMessage());
-			RegistrarError("Error al solicitar Ticket Ventanilla1: " + ObtenerFechaHora() + " " + e.getMessage() + "\n");
-		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, "Error al solicitar Ticket Ventanilla2 " + e.getMessage());
-			RegistrarError("Error al solicitar Ticket Ventanilla2: " + ObtenerFechaHora() + " " + e.getMessage() + "\n");
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Error al solicitar Ticket Ventanilla: " + e.getMessage());
+			RegistrarError("\n" + ObtenerFechaHora() + "\n // Error al solicitar Ticket Ventanilla: " + e.getMessage());
 		}
 	}
 
 	protected void actionPerformedBtnSolicitarTicketCaja(ActionEvent arg0) {
 		try {
-			Socket socketSolicitarTicket = new Socket(ipPantalla, puertoPantalla);
+			Socket socketSolicitarTicket = new Socket(ipServer, puertoServer);
 			
 			PaqueteDatos pd = new PaqueteDatos();
 			pd.setComando(11); // 11 CAJA
@@ -390,18 +447,15 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 			socketSolicitarTicket.close();
 			oos_llamar_nticket.close();
 			
-		} catch (UnknownHostException e) {
-			JOptionPane.showMessageDialog(null, "Error al solicitar Ticket Caja1 " + e.getMessage());
-			RegistrarError("Error al solicitar Ticket Caja1: " + ObtenerFechaHora() + " " + e.getMessage() + "\n");
-		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, "Error al solicitar Ticket Caja2 " + e.getMessage());
-			RegistrarError("Error al solicitar Ticket Caja2: " + ObtenerFechaHora() + " " + e.getMessage() + "\n");
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Error al solicitar Ticket Caja: " + e.getMessage());
+			RegistrarError("\n" + ObtenerFechaHora() + "\n // Error al solicitar Ticket Caja: " + e.getMessage());
 		}	
 	}
 	
 	protected void actionPerformedBtnTurno(ActionEvent arg0) {
-		try {
-			Socket socketSolicitarTicket = new Socket(ipPantalla, puertoPantalla);
+		try { 
+			Socket socketSolicitarTicket = new Socket(ipServer, puertoServer);
 			
 			PaqueteDatos pd = new PaqueteDatos();
 			pd.setComando(12); // 12 TURNO
@@ -411,59 +465,69 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 			oos_llamar_nticket.writeObject(pd);
 			socketSolicitarTicket.close();
 			oos_llamar_nticket.close();
-		
-		} catch (UnknownHostException e) {
-			JOptionPane.showMessageDialog(null, "Error al solicitar Ticket Turno1 " + e.getMessage());
-			RegistrarError("Error al solicitar Ticket Turno1: " + ObtenerFechaHora() + " " + e.getMessage() + "\n");
-		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, "Error al solicitar Ticket Turno2 " + e.getMessage());
-			RegistrarError("Error al solicitar Ticket Turno2: " + ObtenerFechaHora() + " " + e.getMessage() + "\n");
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Error al solicitar Ticket Turno: " + e.getMessage());
+			RegistrarError("\n" + ObtenerFechaHora() + "\n // Error al solicitar Ticket Turno: " + e.getMessage());
 		}	
 	}
 
-	public void ImprimirTicket(int nticket, int tipo){
+	public void ImprimirTicket(int nticketprox, int tipo){
 		try {
 			String tipoNombre = null;
 			
 			switch (tipo) {
 			case 1:
-				tipoNombre = "VE";
+				if(nticketprox < 10)
+					tipoNombre = "VE00";
+				if(nticketprox >= 10 && nticketprox < 100)
+					tipoNombre = "VE0";
+				if(nticketprox >= 100)
+					tipoNombre = "VE";
 				break;
 			case 2:
-				tipoNombre = "CA";
+				if(nticketprox < 10)
+					tipoNombre = "CA00";
+				if(nticketprox >= 10 && nticketprox < 100)
+					tipoNombre = "CA0";
+				if(nticketprox >= 100)
+					tipoNombre = "CA";
 				break;
 			case 3:
-				tipoNombre = "TU";
+				if(nticketprox < 10)
+					tipoNombre = "TU00";
+				if(nticketprox >= 10 && nticketprox < 100)
+					tipoNombre = "TU0";
+				if(nticketprox >= 100)
+					tipoNombre = "TU";
 				break;
 			default:
 				break;
 			}
 			
 			Map<String, Object> parameters = new HashMap();
-			parameters.put("prtNTicket", nticket);
+			parameters.put("prtNTicket", nticketprox);
 			parameters.put("prtTipo", tipoNombre);
 			try{
-				JasperPrint impressao = JasperFillManager.fillReport(getClass().getClassLoader().getResourceAsStream("rTicket.jasper"), parameters, new JREmptyDataSource());
-				JasperPrintManager.printReport(impressao, false);
+				if(modo_imp == 0)
+					JOptionPane.showMessageDialog(null, tipoNombre + nticketprox);
+				if(modo_imp == 1){
+					JasperPrint impressao = JasperFillManager.fillReport(getClass().getClassLoader().getResourceAsStream("rTicket.jasper"), parameters, new JREmptyDataSource());
+					JasperPrintManager.printReport(impressao, false);
+				}
 			}
-			catch (JRException ex){
-				JOptionPane.showMessageDialog(null, "Error iReport: " + ex.getMessage() );
-				RegistrarError("Error iReport: " + ObtenerFechaHora() + " " + ex.getMessage() + "\n");
+			catch (Exception ex){
+				JOptionPane.showMessageDialog(null, "Error iReport al imprimir: " + ex.getMessage() );
+				RegistrarError("\n" + ObtenerFechaHora() + "\n // Error iReport al imprimir: " + ex.getMessage());
 			}
-			
-			JOptionPane.showMessageDialog(null, "\nNRO ATENCIÓN:   " + tipoNombre + " - " + nticket + "\n\nSi no se imprimió su ticket, por favor llame a un encargado", "Información", JOptionPane.INFORMATION_MESSAGE);
-		
-		} catch (Exception e) {
+			//JOptionPane.showMessageDialog(null, "\nNRO ATENCIÓN:   " + tipoNombre + " - " + nticket + "\n\nSi no se imprimió su ticket, por favor llame a un encargado", "Información", JOptionPane.INFORMATION_MESSAGE);
+		} catch (Exception e){
 			JOptionPane.showMessageDialog(null, "Error al imprimir "+ e.getMessage());
-			RegistrarError("Error al imprimir: " + ObtenerFechaHora() + " " + e.getMessage() + "\n");
+			RegistrarError("\n" + ObtenerFechaHora() + "\n // Error al imprimir: " + e.getMessage());
 		}	
 	}
 	
-	
-	int nro = -1;
-	
 	protected void actionPerformedBtnCerrar(ActionEvent arg0) {
-		nro = -1;
+		pass = -1;
 		this.setEnabled(false);
 		numeros n = new numeros(this);
 		n.setVisible(true);
@@ -472,10 +536,12 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 	}
 	
 	public void verificarPass(){
-		if(nro == 2244){
+		if(pass == 2244){
 			new Control().cerrarApp();
 			System.exit(0);
-			
+		}
+		if(pass == 0011){
+			JOptionPane.showMessageDialog(null, "CONFIGURACIONES");
 		}
 	}
 }

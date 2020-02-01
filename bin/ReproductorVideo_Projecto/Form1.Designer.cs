@@ -28,9 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.mediaPLayer = new AxWMPLib.AxWindowsMediaPlayer();
-            this.label1 = new System.Windows.Forms.Label();
+            this.lblTitulo = new System.Windows.Forms.Label();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.lblHora = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.mediaPLayer)).BeginInit();
             this.SuspendLayout();
             // 
@@ -45,25 +48,42 @@
             this.mediaPLayer.Size = new System.Drawing.Size(600, 152);
             this.mediaPLayer.TabIndex = 0;
             // 
-            // label1
+            // lblTitulo
             // 
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.SystemColors.Control;
-            this.label1.Location = new System.Drawing.Point(34, 319);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(554, 48);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "GERENCIA REGIONAL DE TRANSPORTES Y COMUNICACIONES LES DA LA BIENVENIDA";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.label1.Click += new System.EventHandler(this.label1_Click);
+            this.lblTitulo.BackColor = System.Drawing.Color.Transparent;
+            this.lblTitulo.Font = new System.Drawing.Font("Futura Md BT", 13F, System.Drawing.FontStyle.Bold);
+            this.lblTitulo.ForeColor = System.Drawing.Color.White;
+            this.lblTitulo.Location = new System.Drawing.Point(34, 318);
+            this.lblTitulo.Name = "lblTitulo";
+            this.lblTitulo.Size = new System.Drawing.Size(262, 31);
+            this.lblTitulo.TabIndex = 1;
+            this.lblTitulo.Text = "GERENCIA REGIONAL DE TRANSPORTES Y COMUNICACIONES LES DA LA BIENVENIDA";
+            this.lblTitulo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // timer1
+            // 
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // lblHora
+            // 
+            this.lblHora.BackColor = System.Drawing.Color.Transparent;
+            this.lblHora.Font = new System.Drawing.Font("Futura Md BT", 16F, System.Drawing.FontStyle.Bold);
+            this.lblHora.ForeColor = System.Drawing.Color.Transparent;
+            this.lblHora.Location = new System.Drawing.Point(286, 314);
+            this.lblHora.Name = "lblHora";
+            this.lblHora.Size = new System.Drawing.Size(314, 31);
+            this.lblHora.TabIndex = 2;
+            this.lblHora.Text = "12:05:15";
+            this.lblHora.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.BackColor = System.Drawing.Color.DeepSkyBlue;
             this.ClientSize = new System.Drawing.Size(600, 366);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.lblHora);
+            this.Controls.Add(this.lblTitulo);
             this.Controls.Add(this.mediaPLayer);
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form1";
@@ -78,7 +98,9 @@
         #endregion
 
         private AxWMPLib.AxWindowsMediaPlayer mediaPLayer;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblTitulo;
+        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Label lblHora;
     }
 }
 

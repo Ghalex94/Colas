@@ -14,14 +14,17 @@ namespace Video
         public Form1()
         {
             InitializeComponent();
+            timer1.Enabled = true;
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            this.label1.SetBounds(0, (this.Height / 4) * 3, this.Width, 50);
+            this.lblTitulo.SetBounds(0, (this.Height/4)*3 - (int)(this.Height * 0.03), (this.Width/4)*3, 50);
 
-            this.mediaPLayer.Height = (this.Height/4)*3;
-           
+            this.lblHora.SetBounds((this.Width/4)*3, (this.Height/4)*3 - (int)(this.Height * 0.03), this.Width/4, 50);
+
+            this.mediaPLayer.Height = ((this.Height / 4) * 3);
+
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 
             string directory = AppDomain.CurrentDomain.BaseDirectory;
@@ -41,9 +44,9 @@ namespace Video
 
         }
 
-        private void label1_Click(object sender, EventArgs e)
+        private void timer1_Tick(object sender, EventArgs e)
         {
-
+            lblHora.Text = "Son la's:  " + DateTime.Now.ToString("hh:mm:ss tt");
         }
     }
 }

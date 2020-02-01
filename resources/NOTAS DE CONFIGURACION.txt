@@ -1,0 +1,8 @@
+impModo			: Se elige la manera de mostrar el mensaje cuando se solicita un ticket desde la pantalla del cliente: 0=Muestra mensaje en pantalla. 1=Imprime en ticket.
+ipServer		: Dirección IP donde se encuentra el servidor.
+lic			: Fecha de caducidad del Sistema dd/MM/yyyy
+puertoCliente		: Por defecto: 9001
+puertoServer		: Por defecto: 9000
+puertoVentanilla	: Por defecto: 9002
+venLim			: Limite de ventanillas a usar
+ventTipo		: Tipo de uso que tendrá cada ventanilla: 0=Invalido 1=Ventanilla 2=Caja 3=Turno
