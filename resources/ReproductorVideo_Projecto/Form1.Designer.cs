@@ -51,8 +51,8 @@
             // lblTitulo
             // 
             this.lblTitulo.BackColor = System.Drawing.Color.Transparent;
-            this.lblTitulo.Font = new System.Drawing.Font("Futura Md BT", 13F, System.Drawing.FontStyle.Bold);
-            this.lblTitulo.ForeColor = System.Drawing.Color.White;
+            this.lblTitulo.Font = new System.Drawing.Font("Futura Md BT", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTitulo.ForeColor = System.Drawing.Color.Black;
             this.lblTitulo.Location = new System.Drawing.Point(34, 318);
             this.lblTitulo.Name = "lblTitulo";
             this.lblTitulo.Size = new System.Drawing.Size(262, 31);
@@ -66,9 +66,9 @@
             // 
             // lblHora
             // 
-            this.lblHora.BackColor = System.Drawing.Color.Transparent;
-            this.lblHora.Font = new System.Drawing.Font("Futura Md BT", 16F, System.Drawing.FontStyle.Bold);
-            this.lblHora.ForeColor = System.Drawing.Color.Transparent;
+            this.lblHora.BackColor = System.Drawing.Color.LawnGreen;
+            this.lblHora.Font = new System.Drawing.Font("Futura Md BT", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblHora.ForeColor = System.Drawing.Color.Black;
             this.lblHora.Location = new System.Drawing.Point(286, 314);
             this.lblHora.Name = "lblHora";
             this.lblHora.Size = new System.Drawing.Size(314, 31);

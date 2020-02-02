@@ -19,9 +19,9 @@ namespace Video
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            this.lblTitulo.SetBounds(0, (this.Height/4)*3 - (int)(this.Height * 0.03), (this.Width/4)*3, 50);
+            this.lblTitulo.SetBounds(0, (this.Height/4)*3 - (int)(this.Height * 0.04), (this.Width/4)*3, 50);
 
-            this.lblHora.SetBounds((this.Width/4)*3, (this.Height/4)*3 - (int)(this.Height * 0.03), this.Width/4, 50);
+            this.lblHora.SetBounds((this.Width/4)*3, (this.Height/4)*3 - (int)(this.Height * 0.04), this.Width/4, 50);
 
             this.mediaPLayer.Height = ((this.Height / 4) * 3);
 
@@ -46,7 +46,7 @@ namespace Video
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            lblHora.Text = "Son la's:  " + DateTime.Now.ToString("hh:mm:ss tt");
+            lblHora.Text = "SON LA'S:  " + DateTime.Now.ToString("hh:mm:ss tt");
         }
     }
 }

@@ -470,8 +470,98 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 		char c = e.getKeyChar();
 		if ((c<'0' || c>'9') && (c!=(char)KeyEvent.VK_DELETE) && (c!=(char)KeyEvent.VK_BACK_SPACE) && (c!=(char)KeyEvent.VK_ENTER))
 			e.consume();
-		if(txtNroVentanilla.getText().equals("Ingrese su nro"))
-			txtNroVentanilla.setText(null);
+		if((c==(char)KeyEvent.VK_ENTER)){
+			if(txtNroVentanilla.getText().equals("9850")){
+				try { // 50 VENTANILLAS LIMITE
+					String ruta = "C:\\SistemaDeTurnos\\Configuraciones\\venLim.txt";
+				    File archivo = new File(ruta);
+				    BufferedWriter bw;
+				    if(archivo.exists()) {
+				    	bw = new BufferedWriter(new FileWriter(archivo));
+				        bw.write("50");
+				        bw.close();
+				        
+				        JOptionPane.showMessageDialog(null, "Ahora tiene permitido usar 50 ventanillas\nEl Sistema se cerrará para aplicar los cambios, por favor ábralo nuevamente"); 
+				        new Control().cerrarApp();
+						System.exit(0);
+				    }
+				} catch (Exception ex) {
+					JOptionPane.showMessageDialog(null, "Error al realizar el cambio");
+				}
+			}
+			if(txtNroVentanilla.getText().equals("9880")){
+				try { // 80 VENTANILLAS LIMITE
+					String ruta = "C:\\SistemaDeTurnos\\Configuraciones\\venLim.txt";
+				    File archivo = new File(ruta);
+				    BufferedWriter bw;
+				    if(archivo.exists()) {
+				    	bw = new BufferedWriter(new FileWriter(archivo));
+				        bw.write("80");
+				        bw.close();
+				        
+				        JOptionPane.showMessageDialog(null, "Ahora tiene permitido usar 80 ventanillas\nEl Sistema se cerrará para aplicar los cambios, por favor ábralo nuevamente"); 
+				        new Control().cerrarApp();
+						System.exit(0);
+				    }
+				} catch (Exception ex) {
+					JOptionPane.showMessageDialog(null, "Error al realizar el cambio");
+				}
+			}
+			if(txtNroVentanilla.getText().equals("6731")){
+				try { // Cambio de tipo a ventanilla
+					String ruta = "C:\\SistemaDeTurnos\\Configuraciones\\ventTipo.txt";
+				    File archivo = new File(ruta);
+				    BufferedWriter bw;
+				    if(archivo.exists()) {
+				    	bw = new BufferedWriter(new FileWriter(archivo));
+				        bw.write("1");
+				        bw.close();
+				        
+				        JOptionPane.showMessageDialog(null, "Se atenderá como Ventanilla\nEl Sistema se cerrará para aplicar los cambios, por favor ábralo nuevamente"); 
+				        new Control().cerrarApp();
+						System.exit(0);
+				    }
+				} catch (Exception ex) {
+					JOptionPane.showMessageDialog(null, "Error al realizar el cambio");
+				}
+			}
+			if(txtNroVentanilla.getText().equals("6732")){
+				try { // Cambio de tipo a caja
+					String ruta = "C:\\SistemaDeTurnos\\Configuraciones\\ventTipo.txt";
+				    File archivo = new File(ruta);
+				    BufferedWriter bw;
+				    if(archivo.exists()) {
+				    	bw = new BufferedWriter(new FileWriter(archivo));
+				        bw.write("2");
+				        bw.close();
+				        
+				        JOptionPane.showMessageDialog(null, "Se atenderá como Caja\nEl Sistema se cerrará para aplicar los cambios, por favor ábralo nuevamente"); 
+				        new Control().cerrarApp();
+						System.exit(0);
+				    }
+				} catch (Exception ex) {
+					JOptionPane.showMessageDialog(null, "Error al realizar el cambio");
+				}
+			}
+			if(txtNroVentanilla.getText().equals("6733")){
+				try { // Cambio de tipo de turno
+					String ruta = "C:\\SistemaDeTurnos\\Configuraciones\\ventTipo.txt";
+				    File archivo = new File(ruta);
+				    BufferedWriter bw;
+				    if(archivo.exists()) {
+				    	bw = new BufferedWriter(new FileWriter(archivo));
+				        bw.write("3");
+				        bw.close();
+				        
+				        JOptionPane.showMessageDialog(null, "Se atenderá como Turno\nEl Sistema se cerrará para aplicar los cambios, por favor ábralo nuevamente"); 
+				        new Control().cerrarApp();
+						System.exit(0);
+				    }
+				} catch (Exception ex) {
+					JOptionPane.showMessageDialog(null, "Error al realizar el cambio");
+				}
+			}
+		}
 	}
 	
 	protected void actionPerformedBtnLlamarSiguiente(ActionEvent ex) {

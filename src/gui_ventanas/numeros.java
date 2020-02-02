@@ -36,16 +36,14 @@ public class numeros extends JFrame {
 	private JButton boton7;
 
 	Cliente c = null;
+	Principal p = null;
 	private JLabel lblNewLabel;
 	
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					numeros frame = new numeros(null);
+					numeros frame = new numeros(null, null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -57,8 +55,9 @@ public class numeros extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public numeros(Cliente temp) {
+	public numeros(Cliente temp, Principal temp2) {
 		c = temp;
+		p = temp2;
 
 		setUndecorated(true);
 		setType(Type.POPUP);
@@ -305,14 +304,28 @@ public class numeros extends JFrame {
 		txtNumero.setText("");
 	}
 	protected void actionPerformedBtnOn(ActionEvent e) {
-		try {
+		if(c != null){
+			try {
+				this.setAlwaysOnTop(false);
+				c.pass = txtNumero.getText();
+				c.verificarPass();
+			} catch (Exception e2) {
+			}
+			c.setEnabled(true);
 			this.setAlwaysOnTop(false);
-			c.pass = txtNumero.getText();
-			c.verificarPass();
-		} catch (Exception e2) {
+			this.dispose();
 		}
-		c.setEnabled(true);
-		this.setAlwaysOnTop(false);
-		this.dispose();
+		
+		if(p != null){
+			try {
+				this.setAlwaysOnTop(false);
+				p.pass = txtNumero.getText();
+				p.verificarPass();
+			} catch (Exception e2) {
+			}
+			p.setEnabled(true);
+			this.setAlwaysOnTop(false);
+			this.dispose();
+		}
 	}
 }

@@ -529,7 +529,7 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 	protected void actionPerformedBtnCerrar(ActionEvent arg0) {
 		pass = "-1";
 		this.setEnabled(false);
-		numeros n = new numeros(this);
+		numeros n = new numeros(this, null);
 		n.setVisible(true);
 		n.setAlwaysOnTop(true);	
 		n.setLocationRelativeTo(null);

@@ -1,21 +1,20 @@
 /Librerias/
+/NOTAS DE CONFIGURACION.txt
+/Reiniciar Sistema Pantalla.bat
+/Reiniciar Sistema Ventanilla.bat
 /ReproductorVideo_Projecto/
 /clases/
 /db_colas.sql
-/grtc.png
 /gui_ventanas/
 /imgBXB.png
-/logo.png
+/logoCliente.png
+/logoTicket.png
+/logoVentanilla.png
 /mysql/
+/org/
 /rAtenciones.jasper
 /rTicket.jasper
 /rTicketsTotal.jasper
 /turno.mp3
 /turno2.mp3
-/org/
-/NOTAS DE CONFIGURACION.txt
-/logoCliente.png
-/logoTicket.png
-/logoVentanilla.png
-/Reiniciar Sistema Pantalla.bat
-/Reiniciar Sistema Ventanilla.bat
+/Configuraciones/
