@@ -264,7 +264,6 @@ public class Ventanilla extends JFrame implements Runnable, MouseListener  {
 	
 	public void cargar(){
     	this.setLocationRelativeTo(null);
-    	
     	InetAddress address;
 		try {
 			address = InetAddress.getLocalHost();

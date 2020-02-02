@@ -306,7 +306,8 @@ public class numeros extends JFrame {
 	}
 	protected void actionPerformedBtnOn(ActionEvent e) {
 		try {
-			c.pass = Integer.parseInt(txtNumero.getText());
+			this.setAlwaysOnTop(false);
+			c.pass = txtNumero.getText();
 			c.verificarPass();
 		} catch (Exception e2) {
 		}

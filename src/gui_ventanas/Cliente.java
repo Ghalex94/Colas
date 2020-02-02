@@ -76,7 +76,7 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 	int puertoCliente = 9001;
 	
 	int modo_imp = 0; // 0=PANTALLA 1=TICKET
-	public int pass = -1;
+	public String pass = "-1";
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -527,7 +527,7 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 	}
 	
 	protected void actionPerformedBtnCerrar(ActionEvent arg0) {
-		pass = -1;
+		pass = "-1";
 		this.setEnabled(false);
 		numeros n = new numeros(this);
 		n.setVisible(true);
@@ -536,12 +536,27 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 	}
 	
 	public void verificarPass(){
-		if(pass == 2244){
+		if(pass.equals("2244")){
 			new Control().cerrarApp();
 			System.exit(0);
 		}
-		if(pass == 0011){
-			JOptionPane.showMessageDialog(null, "CONFIGURACIONES");
+		if(pass.equals("7489")){
+			try { // CAMBIAR EL MODO DE IMPRESIÓN
+				String ruta = "C:\\SistemaDeTurnos\\Configuraciones\\impModo.txt";
+			    File archivo = new File(ruta);
+			    BufferedWriter bw;
+			    if(archivo.exists()) {
+			    	bw = new BufferedWriter(new FileWriter(archivo));
+			        bw.write("1");
+			        bw.close();
+			        
+			        JOptionPane.showMessageDialog(null, "Ha cambiado el modo de impresión.\nEl Sistema se cerrará para aplicar los cambios, por favor ábralo nuevamente"); 
+			        new Control().cerrarApp();
+					System.exit(0);
+			    }
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null, "Error al realizar el cambio");
+			}
 		}
 	}
 }
