@@ -6,3 +6,5 @@ puertoServer		: Por defecto: 9000
 puertoVentanilla	: Por defecto: 9002
 venLim	 - 9850 9880	: Limite de ventanillas a usar
 ventTipo - 6731 6732 6733: Tipo de uso que tendrá cada ventanilla: 0=Invalido 1=Ventanilla 2=Caja 3=Turno
+
+p_numero(p_10001)	: Cambiar puerto de ventanilla

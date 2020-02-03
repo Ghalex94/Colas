@@ -5,6 +5,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import clases.Control;
+
 import javax.swing.JTextField;
 import java.awt.SystemColor;
 import java.awt.Font;
@@ -13,10 +16,14 @@ import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Window.Type;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 public class numeros extends JFrame {
 
@@ -304,28 +311,57 @@ public class numeros extends JFrame {
 		txtNumero.setText("");
 	}
 	protected void actionPerformedBtnOn(ActionEvent e) {
-		if(c != null){
-			try {
-				this.setAlwaysOnTop(false);
-				c.pass = txtNumero.getText();
-				c.verificarPass();
-			} catch (Exception e2) {
+		try {
+			String codCompleto = txtNumero.getText();
+			String[] parts = codCompleto.split("_");
+			String cod = parts[0]; // p
+			String number = parts[1]; // 123
+			
+			if(cod.equals("p")){
+				try { // CAMBIAR PUERTO A VENTANILLA
+					String ruta = "C:\\SistemaDeTurnos\\Configuraciones\\puertoCliente.txt";
+				    File archivo = new File(ruta);
+				    BufferedWriter bw;
+				    if(archivo.exists()) {
+				    	bw = new BufferedWriter(new FileWriter(archivo));
+				        bw.write(number);
+				        bw.close();
+
+						this.setAlwaysOnTop(false);
+				        JOptionPane.showMessageDialog(null, "El puerto que usará esta PC es el: " + number +"\nEl Sistema se cerrará para aplicar los cambios, por favor ábralo nuevamente"); 
+				        new Control().cerrarApp();
+						System.exit(0);
+				    }
+				} catch (Exception ex) {
+					JOptionPane.showMessageDialog(null, "Error al realizar el cambio");
+				}
 			}
-			c.setEnabled(true);
-			this.setAlwaysOnTop(false);
-			this.dispose();
+		} catch (Exception e2) {
+			if(c != null){
+				try {
+					this.setAlwaysOnTop(false);
+					c.pass = txtNumero.getText();
+					c.verificarPass();
+				} catch (Exception e3) {
+				}
+				c.setEnabled(true);
+				this.setAlwaysOnTop(false);
+				this.dispose();
+			}
+			
+			if(p != null){
+				try {
+					this.setAlwaysOnTop(false);
+					p.pass = txtNumero.getText();
+					p.verificarPass();
+				} catch (Exception e3) {
+				}
+				p.setEnabled(true);
+				this.setAlwaysOnTop(false);
+				this.dispose();
+			}
 		}
 		
-		if(p != null){
-			try {
-				this.setAlwaysOnTop(false);
-				p.pass = txtNumero.getText();
-				p.verificarPass();
-			} catch (Exception e2) {
-			}
-			p.setEnabled(true);
-			this.setAlwaysOnTop(false);
-			this.dispose();
-		}
+		
 	}
 }

@@ -271,7 +271,7 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 					address = InetAddress.getLocalHost();
 					ipCliente = address.getHostAddress();
 				} catch (UnknownHostException e) {
-					RegistrarError("\n" + ObtenerFechaHora() + " // Error al cargar IP: " + e.getMessage());
+					RegistrarError(ObtenerFechaHora() + " // Error al cargar IP: " + e.getMessage());
 				}
 				Thread mihilo = new Thread(this);
 				mihilo.start();
@@ -288,7 +288,7 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 				
 				if(ipCliente.equals("127.0.0.1")){
 	        		JOptionPane.showMessageDialog(null, "Compruebe su conexión en red");					
-					RegistrarError("\n" + ObtenerFechaHora() + " // Error de red al iniciar programa");
+					RegistrarError(ObtenerFechaHora() + " // Error de red al iniciar programa");
 					new Control().cerrarApp();
 	        		System.exit(0);
 				}
@@ -332,7 +332,7 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 					mihilo.start();
 				}
 			} catch (UnknownHostException e) {
-				RegistrarError("\n" + ObtenerFechaHora() + " // Error al cargar IP: " + e.getMessage());
+				RegistrarError(ObtenerFechaHora() + " // Error al cargar IP: " + e.getMessage());
 			}
 	}
 	
@@ -358,11 +358,11 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 				}
 			} catch (IOException e) {
 				server_Cliente.close();
-				RegistrarError("\n" + ObtenerFechaHora() + " //Error en run con serverCliente: " + e.getMessage());
+				RegistrarError(ObtenerFechaHora() + " //Error en run con serverCliente: " + e.getMessage());
 			}
 			
 		} catch (Exception e) {
-			RegistrarError("\n" + ObtenerFechaHora() + " // Error en run: " + e.getMessage());
+			RegistrarError(ObtenerFechaHora() + " // Error en run: " + e.getMessage());
 		}
 	}
 	
@@ -399,6 +399,7 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 				file.createNewFile();
 	        fw = new FileWriter(file.getAbsoluteFile(), true);
 	        bw = new BufferedWriter(fw);
+	        bw.newLine();
 	        bw.write(errorMsj);
         } catch (IOException e) {
 			JOptionPane.showMessageDialog(null, "Error al registrar error1: " + ObtenerFechaHora() + " " + e.getMessage());
@@ -422,6 +423,7 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 			PaqueteDatos pd = new PaqueteDatos();
 			pd.setComando(10); // 10 VENTANILLA
 			pd.setIp(ipCliente);
+			pd.setPuerto(puertoCliente);
 			
 			ObjectOutputStream oos_llamar_nticket = new ObjectOutputStream(socketSolicitarTicket.getOutputStream());
 			oos_llamar_nticket.writeObject(pd);
@@ -430,7 +432,7 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 			
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Error al solicitar Ticket Ventanilla: " + e.getMessage());
-			RegistrarError("\n" + ObtenerFechaHora() + "\n // Error al solicitar Ticket Ventanilla: " + e.getMessage());
+			RegistrarError(ObtenerFechaHora() + "\n // Error al solicitar Ticket Ventanilla: " + e.getMessage());
 		}
 	}
 
@@ -441,6 +443,7 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 			PaqueteDatos pd = new PaqueteDatos();
 			pd.setComando(11); // 11 CAJA
 			pd.setIp(ipCliente);
+			pd.setPuerto(puertoCliente);
 			
 			ObjectOutputStream oos_llamar_nticket = new ObjectOutputStream(socketSolicitarTicket.getOutputStream());
 			oos_llamar_nticket.writeObject(pd);	
@@ -449,7 +452,7 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 			
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Error al solicitar Ticket Caja: " + e.getMessage());
-			RegistrarError("\n" + ObtenerFechaHora() + "\n // Error al solicitar Ticket Caja: " + e.getMessage());
+			RegistrarError(ObtenerFechaHora() + "\n // Error al solicitar Ticket Caja: " + e.getMessage());
 		}	
 	}
 	
@@ -460,6 +463,7 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 			PaqueteDatos pd = new PaqueteDatos();
 			pd.setComando(12); // 12 TURNO
 			pd.setIp(ipCliente);
+			pd.setPuerto(puertoCliente);
 			
 			ObjectOutputStream oos_llamar_nticket = new ObjectOutputStream(socketSolicitarTicket.getOutputStream());
 			oos_llamar_nticket.writeObject(pd);
@@ -467,8 +471,8 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 			oos_llamar_nticket.close();
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Error al solicitar Ticket Turno: " + e.getMessage());
-			RegistrarError("\n" + ObtenerFechaHora() + "\n // Error al solicitar Ticket Turno: " + e.getMessage());
-		}	
+			RegistrarError(ObtenerFechaHora() + "\n // Error al solicitar Ticket Turno: " + e.getMessage());
+		}
 	}
 
 	public void ImprimirTicket(int nticketprox, int tipo){
@@ -517,12 +521,12 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 			}
 			catch (Exception ex){
 				JOptionPane.showMessageDialog(null, "Error iReport al imprimir: " + ex.getMessage() );
-				RegistrarError("\n" + ObtenerFechaHora() + "\n // Error iReport al imprimir: " + ex.getMessage());
+				RegistrarError(ObtenerFechaHora() + "\n // Error iReport al imprimir: " + ex.getMessage());
 			}
 			//JOptionPane.showMessageDialog(null, "\nNRO ATENCIÓN:   " + tipoNombre + " - " + nticket + "\n\nSi no se imprimió su ticket, por favor llame a un encargado", "Información", JOptionPane.INFORMATION_MESSAGE);
 		} catch (Exception e){
 			JOptionPane.showMessageDialog(null, "Error al imprimir "+ e.getMessage());
-			RegistrarError("\n" + ObtenerFechaHora() + "\n // Error al imprimir: " + e.getMessage());
+			RegistrarError(ObtenerFechaHora() + "\n // Error al imprimir: " + e.getMessage());
 		}	
 	}
 	
@@ -540,7 +544,7 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 			new Control().cerrarApp();
 			System.exit(0);
 		}
-		if(pass.equals("7489")){
+		if(pass.equals("1004")){
 			try { // CAMBIAR EL MODO DE IMPRESIÓN
 				String ruta = "C:\\SistemaDeTurnos\\Configuraciones\\impModo.txt";
 			    File archivo = new File(ruta);
@@ -550,7 +554,25 @@ public class Cliente extends JFrame implements Runnable, MouseListener, ActionLi
 			        bw.write("1");
 			        bw.close();
 			        
-			        JOptionPane.showMessageDialog(null, "Ha cambiado el modo de impresión.\nEl Sistema se cerrará para aplicar los cambios, por favor ábralo nuevamente"); 
+			        JOptionPane.showMessageDialog(null, "Ha cambiado el modo de impresión a ticket.\nEl Sistema se cerrará para aplicar los cambios, por favor ábralo nuevamente"); 
+			        new Control().cerrarApp();
+					System.exit(0);
+			    }
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null, "Error al realizar el cambio");
+			}
+		}
+		if(pass.equals("1005")){
+			try { // CAMBIAR EL MODO DE IMPRESIÓN
+				String ruta = "C:\\SistemaDeTurnos\\Configuraciones\\impModo.txt";
+			    File archivo = new File(ruta);
+			    BufferedWriter bw;
+			    if(archivo.exists()) {
+			    	bw = new BufferedWriter(new FileWriter(archivo));
+			        bw.write("0");
+			        bw.close();
+			        
+			        JOptionPane.showMessageDialog(null, "Ha cambiado el modo de impresión a pantalla.\nEl Sistema se cerrará para aplicar los cambios, por favor ábralo nuevamente"); 
 			        new Control().cerrarApp();
 					System.exit(0);
 			    }

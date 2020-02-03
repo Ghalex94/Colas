@@ -41,6 +41,7 @@ import javax.swing.SwingConstants;
 import java.awt.SystemColor;
 import java.awt.Color;
 import javax.swing.JTextField;
+import javax.swing.border.LineBorder;
 
 public class Pantalla extends JFrame implements Runnable {
 
@@ -61,9 +62,9 @@ public class Pantalla extends JFrame implements Runnable {
 	
 	String lic = null;
 	
-	int puertoServer = 9000;
-	int puertoCliente = 9001;
-	int puertoVentanilla = 9002;
+	int puertoServer = -2;
+	int puertoCliente = -2;
+	int puertoVentanilla = -2;
 	
 	int ordenCuadros = 1;
 	
@@ -114,54 +115,59 @@ public class Pantalla extends JFrame implements Runnable {
 		int altoColas = altoventana/8;
 		
 		this.txtCola1 = new JTextField();
+		txtCola1.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		this.txtCola1.setText(" ");
 		this.txtCola1.setEditable(false);
 		this.txtCola1.setForeground(Color.BLACK);
 		this.txtCola1.setBackground(new Color(255, 255, 255));
 		this.txtCola1.setHorizontalAlignment(SwingConstants.CENTER);
-		this.txtCola1.setFont(new Font("Futura Md BT", Font.BOLD, 40));
+		this.txtCola1.setFont(new Font("Futura Md BT", Font.BOLD, 36));
 		this.txtCola1.setBounds(0, 0, anchoColas, altoColas);
 		this.contentPane.add(this.txtCola1);
 		this.txtCola1.setColumns(10);
 		
 		this.txtCola2 = new JTextField();
+		txtCola2.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		this.txtCola2.setText(" ");
 		this.txtCola2.setEditable(false);
 		this.txtCola2.setForeground(Color.BLACK);
 		this.txtCola2.setBackground(new Color(255, 255, 255));
 		this.txtCola2.setHorizontalAlignment(SwingConstants.CENTER);
-		this.txtCola2.setFont(new Font("Futura Md BT", Font.BOLD, 40));
+		this.txtCola2.setFont(new Font("Futura Md BT", Font.BOLD, 36));
 		this.txtCola2.setBounds(anchoColas, 0, anchoColas, altoColas);
 		this.contentPane.add(this.txtCola2);
 		this.txtCola2.setColumns(10);
 		
 		this.txtCola3 = new JTextField();
+		txtCola3.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		this.txtCola3.setText(" ");
 		this.txtCola3.setEditable(false);
 		this.txtCola3.setForeground(Color.BLACK);
 		this.txtCola3.setBackground(new Color(255, 255, 255));
 		this.txtCola3.setHorizontalAlignment(SwingConstants.CENTER);
-		this.txtCola3.setFont(new Font("Futura Md BT", Font.BOLD, 40));
+		this.txtCola3.setFont(new Font("Futura Md BT", Font.BOLD, 36));
 		this.txtCola3.setBounds(anchoColas*2, 0, anchoColas, altoColas);
 		this.contentPane.add(this.txtCola3);
 		this.txtCola3.setColumns(10);
 		
 		this.txtCola4 = new JTextField();
+		txtCola4.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		this.txtCola4.setText(" ");
 		this.txtCola4.setEditable(false);
 		this.txtCola4.setForeground(Color.BLACK);
 		this.txtCola4.setBackground(new Color(255, 255, 255));
 		this.txtCola4.setHorizontalAlignment(SwingConstants.CENTER);
-		this.txtCola4.setFont(new Font("Futura Md BT", Font.BOLD, 40));
+		this.txtCola4.setFont(new Font("Futura Md BT", Font.BOLD, 36));
 		this.txtCola4.setBounds(anchoColas*3, 0, anchoColas, altoColas);
 		this.contentPane.add(this.txtCola4);
 		this.txtCola4.setColumns(10);
 		
 		this.txtCola5 = new JTextField();
+		txtCola5.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		this.txtCola5.setText(" ");
 		this.txtCola5.setHorizontalAlignment(SwingConstants.CENTER);
 		this.txtCola5.setForeground(Color.BLACK);
-		this.txtCola5.setFont(new Font("Futura Md BT", Font.BOLD, 40));
+		this.txtCola5.setFont(new Font("Futura Md BT", Font.BOLD, 36));
 		this.txtCola5.setEditable(false);
 		this.txtCola5.setColumns(10);
 		this.txtCola5.setBackground(new Color(255, 255, 255));
@@ -169,10 +175,11 @@ public class Pantalla extends JFrame implements Runnable {
 		this.contentPane.add(this.txtCola5);
 		
 		this.txtCola6 = new JTextField();
+		txtCola6.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		this.txtCola6.setText(" ");
 		this.txtCola6.setHorizontalAlignment(SwingConstants.CENTER);
 		this.txtCola6.setForeground(Color.BLACK);
-		this.txtCola6.setFont(new Font("Futura Md BT", Font.BOLD, 40));
+		this.txtCola6.setFont(new Font("Futura Md BT", Font.BOLD, 36));
 		this.txtCola6.setEditable(false);
 		this.txtCola6.setColumns(10);
 		this.txtCola6.setBackground(new Color(255, 255, 255));
@@ -180,10 +187,11 @@ public class Pantalla extends JFrame implements Runnable {
 		this.contentPane.add(this.txtCola6);
 		
 		this.txtCola7 = new JTextField();
+		txtCola7.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		this.txtCola7.setText(" ");
 		this.txtCola7.setHorizontalAlignment(SwingConstants.CENTER);
 		this.txtCola7.setForeground(Color.BLACK);
-		this.txtCola7.setFont(new Font("Futura Md BT", Font.BOLD, 40));
+		this.txtCola7.setFont(new Font("Futura Md BT", Font.BOLD, 36));
 		this.txtCola7.setEditable(false);
 		this.txtCola7.setColumns(10);
 		this.txtCola7.setBackground(new Color(255, 255, 255));
@@ -191,10 +199,11 @@ public class Pantalla extends JFrame implements Runnable {
 		this.contentPane.add(this.txtCola7);
 		
 		this.txtCola8 = new JTextField();
+		txtCola8.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		this.txtCola8.setText(" ");
 		this.txtCola8.setHorizontalAlignment(SwingConstants.CENTER);
 		this.txtCola8.setForeground(Color.BLACK);
-		this.txtCola8.setFont(new Font("Futura Md BT", Font.BOLD, 40));
+		this.txtCola8.setFont(new Font("Futura Md BT", Font.BOLD, 36));
 		this.txtCola8.setEditable(false);
 		this.txtCola8.setColumns(10);
 		this.txtCola8.setBackground(new Color(255, 255, 255));
@@ -212,7 +221,7 @@ public class Pantalla extends JFrame implements Runnable {
 			
 			if(ipServer.equals("127.0.0.1")){
         		JOptionPane.showMessageDialog(null, "Compruebe su conexión en red");					
-				RegistrarError("\n" + ObtenerFechaHora() + " // Error de red al iniciar programa");
+				RegistrarError(ObtenerFechaHora() + " // Error de red al iniciar programa");
 				new Control().cerrarApp();
         		System.exit(0);
 			}
@@ -261,12 +270,12 @@ public class Pantalla extends JFrame implements Runnable {
 				try {
 					Runtime.getRuntime().exec("C:\\SistemaDeTurnos\\ReproductorVideo\\Video.exe", null);
 				} catch (IOException e) {
-					RegistrarError("\n" + ObtenerFechaHora() + " // Error al cargar el reproductor: " + e.getMessage());
+					RegistrarError(ObtenerFechaHora() + " // Error al cargar el reproductor: " + e.getMessage());
 				}
 				this.setAlwaysOnTop(true);
 			}
 		} catch (UnknownHostException e) {
-			RegistrarError("\n" + ObtenerFechaHora() + " // Error al cargar IP: " + e.getMessage());
+			RegistrarError(ObtenerFechaHora() + " // Error al cargar IP: " + e.getMessage());
 		}
 	}
 	
@@ -290,7 +299,7 @@ public class Pantalla extends JFrame implements Runnable {
 				if (consulta != null)
 					consulta.reset();
             } catch (Exception ex) {
-    			RegistrarError("\n" + ObtenerFechaHora() + " // Error al cerrar consulta: " + ex.getMessage());
+    			RegistrarError(ObtenerFechaHora() + " // Error al cerrar consulta: " + ex.getMessage());
             }
 		}
 	}
@@ -299,12 +308,10 @@ public class Pantalla extends JFrame implements Runnable {
 	public void run() {
 		Consultas consultas = new Consultas();
 		consultas.iniciar();
-		int nventanilla = -1;
 		try {
 			ServerSocket serverPantalla = new ServerSocket(puertoServer);
 			Socket socketPantalla;
 			
-			try {
 				while(true){
 					socketPantalla = serverPantalla.accept();
 					
@@ -316,10 +323,13 @@ public class Pantalla extends JFrame implements Runnable {
 					
 					comando = pd_recibido.getComando();
 					ipRecibida = pd_recibido.getIp();
+					puertoVentanilla = pd_recibido.getPuerto();
+					
 					
 					if(comando == 10){ // VIENE DE CLIENTE - SOLICITA NRO TICKET PARA VENTANILLA
 						int nticketnew = ObtenerUltNroTicket(1) + 1;
 						RegistrarAtencion(nticketnew, 1); //VENTANILLA 1
+						puertoCliente = pd_recibido.getPuerto();
 						
 						PaqueteDatos pd_enviar = new PaqueteDatos();
 						pd_enviar.setTicket(nticketnew);
@@ -337,6 +347,7 @@ public class Pantalla extends JFrame implements Runnable {
 					if(comando == 11){ // VIENE DE CLIENTE - SOLICITA NRO TICKET PARA CAJA
 						int nticketnew = ObtenerUltNroTicket(2) + 1;
 						RegistrarAtencion(nticketnew, 2); //CAJA 2
+						puertoCliente = pd_recibido.getPuerto();
 						
 						PaqueteDatos pd_enviar = new PaqueteDatos();
 						pd_enviar.setTicket(nticketnew);
@@ -354,6 +365,7 @@ public class Pantalla extends JFrame implements Runnable {
 					if(comando == 12){ // VIENE DE CLIENTE - SOLICITA NRO TICKET PARA TURNO
 						int nticketnew = ObtenerUltNroTicket(3) + 1; //TURNO 3
 						RegistrarAtencion(nticketnew, 3); //TURNO 3
+						puertoCliente = pd_recibido.getPuerto();
 						
 						PaqueteDatos pd_enviar = new PaqueteDatos();
 						pd_enviar.setTicket(nticketnew);
@@ -367,23 +379,17 @@ public class Pantalla extends JFrame implements Runnable {
 						oos_enviar_nticket.close();
 						socketEnviarNticket.close();
 					}
-					
-					if(comando == 0){ // VIENE DE VENTANILLA - Registrar
-						nventanilla = pd_recibido.getVentanilla();
-						int tipo = pd_recibido.getTipo();
-						RegistrarVentanilla(ipRecibida, tipo, nventanilla);
-					}
-					
+										
 					if(comando == 1){ // VIENE DE VENTANILLA - SOLICITA NRO TICKET
 						int tipo = pd_recibido.getTipo();
 						int nticketprox = ObtenerTicketProximo(tipo);
-						
 						if(nticketprox != -1){
 							int ventanilla = pd_recibido.getVentanilla();
+							puertoVentanilla = pd_recibido.getPuerto();
 							ActualizarEstadoTicket(nticketprox, 1, ventanilla, tipo); // 1 = ATENDIENDO
 							ImprimirMensajeEnPantalla(nticketprox, ventanilla, tipo);
 						}
-						Socket socketEnviarNticket = new Socket(ipRecibida, 9002);
+						Socket socketEnviarNticket = new Socket(ipRecibida, puertoVentanilla);
 						DataOutputStream dos_enviar_nticket = new DataOutputStream(socketEnviarNticket.getOutputStream());
 						dos_enviar_nticket.writeInt(nticketprox);
 						//txtCola.append("Ticket n° " + nticketprox + "\n");
@@ -417,15 +423,17 @@ public class Pantalla extends JFrame implements Runnable {
 						ReproducirAlerta();
 					}
 					
+					
 					ois_paquete_datos.close();
 					socketPantalla.close();
 				}
-			} catch (IOException e) {
-				serverPantalla.close();
-				RegistrarError("\n" + ObtenerFechaHora() + " //Error en run con serverPantalla: " + e.getMessage());
-			}
 		} catch (Exception e) {
-			RegistrarError("\n" + ObtenerFechaHora() + " //Error en run, ventanilla: " + e.getMessage());
+			try {
+				RegistrarError(ObtenerFechaHora() + " //Error en run con serverPantalla: " + e);
+				Runtime.getRuntime().exec("cmd /c start C:\\SistemaDeTurnos\\Sistema\\Reiniciar_Sistema.bat");
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 		}
 		consultas.reset();
 	}
@@ -487,6 +495,7 @@ public class Pantalla extends JFrame implements Runnable {
 				file.createNewFile();
 	        fw = new FileWriter(file.getAbsoluteFile(), true);
 	        bw = new BufferedWriter(fw);
+	        bw.newLine();
 	        bw.write(errorMsj);
         } catch (IOException e) {
 			JOptionPane.showMessageDialog(null, "Error al registrar error1: " + ObtenerFechaHora() + " " + e.getMessage());
@@ -522,7 +531,7 @@ public class Pantalla extends JFrame implements Runnable {
 				if (consulta != null)
 					consulta.reset();
             } catch (Exception ex) {
-    			RegistrarError("\n" + ObtenerFechaHora() + " // Error al cerrar consulta: " + ex.getMessage());
+    			RegistrarError(ObtenerFechaHora() + " // Error al cerrar consulta: " + ex.getMessage());
             }
 		}
 		return ultnroticket;
@@ -547,7 +556,7 @@ public class Pantalla extends JFrame implements Runnable {
 				if (consulta != null)
 					consulta.reset();
             } catch (Exception ex) {
-    			RegistrarError("\n" + ObtenerFechaHora() + " // Error al cerrar consulta: " + ex.getMessage());
+    			RegistrarError(ObtenerFechaHora() + " // Error al cerrar consulta: " + ex.getMessage());
             }
 		}
 		return nticketprox;
@@ -610,35 +619,35 @@ public class Pantalla extends JFrame implements Runnable {
 		
 		switch (ordenCuadros) {
 		case 1:
-			txtCola1.setText(tipoVentanilla + nticketprox + "  -  " + ventanilla);
+			txtCola1.setText(tipoVentanilla + nticketprox + "  ->  " + ventanilla);
 			ordenCuadros++;
 			break;
 		case 2:
-			txtCola2.setText(tipoVentanilla + nticketprox + "  -  " + ventanilla);
+			txtCola2.setText(tipoVentanilla + nticketprox + "  ->  " + ventanilla);
 			ordenCuadros++;
 			break;
 		case 3:
-			txtCola3.setText(tipoVentanilla + nticketprox + "  -  " + ventanilla);
+			txtCola3.setText(tipoVentanilla + nticketprox + "  ->  " + ventanilla);
 			ordenCuadros++;
 			break;
 		case 4:
-			txtCola4.setText(tipoVentanilla + nticketprox + "  -  " + ventanilla);
+			txtCola4.setText(tipoVentanilla + nticketprox + "  ->  " + ventanilla);
 			ordenCuadros++;
 			break;
 		case 5:
-			txtCola5.setText(tipoVentanilla + nticketprox + "  -  " + ventanilla);
+			txtCola5.setText(tipoVentanilla + nticketprox + "  ->  " + ventanilla);
 			ordenCuadros++;
 			break;
 		case 6:
-			txtCola6.setText(tipoVentanilla + nticketprox + "  -  " + ventanilla);
+			txtCola6.setText(tipoVentanilla + nticketprox + "  ->  " + ventanilla);
 			ordenCuadros++;
 			break;
 		case 7:
-			txtCola7.setText(tipoVentanilla + nticketprox + "  -  " + ventanilla);
+			txtCola7.setText(tipoVentanilla + nticketprox + "  ->  " + ventanilla);
 			ordenCuadros++;
 			break;
 		case 8:
-			txtCola8.setText(tipoVentanilla + nticketprox + "  -  " + ventanilla);
+			txtCola8.setText(tipoVentanilla + nticketprox + "  ->  " + ventanilla);
 			ordenCuadros = 1;
 			break;
 		}
@@ -868,7 +877,7 @@ public class Pantalla extends JFrame implements Runnable {
 			player.play();
 			
 		} catch (Exception e) {
-			RegistrarError("\n" + ObtenerFechaHora() + " // No se encontro el sonido: " + e.getMessage());
+			RegistrarError(ObtenerFechaHora() + " // No se encontro el sonido: " + e.getMessage());
 		}
 		consulta.reset();
 	}

@@ -9,6 +9,7 @@ public class PaqueteDatos implements Serializable{
 	private int ticket;
 	private int ventanilla;
 	private int tipo;
+	private int puerto;
 	
 	public int getComando() {
 		return comando;
@@ -39,6 +40,12 @@ public class PaqueteDatos implements Serializable{
 	}
 	public void setTipo(int tipo) {
 		this.tipo = tipo;
+	}
+	public int getPuerto() {
+		return puerto;
+	}
+	public void setPuerto(int puerto) {
+		this.puerto = puerto;
 	}
 	
 }
